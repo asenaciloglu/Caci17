@@ -166,11 +166,19 @@ print("asena")
 # Property fitting
 data_agg$x <- x
 data_agg$y <- y
-data_agg$q <- x*x+y*y
-data_agg$indpref <- indpref
 data_agg
 
-colnames_att <- colnames[2:21]
-colnames_att <- paste(colnames_att, sep = ",")
+profit <- lm(cbind(Att1,  Att2, Att3, Att4, Att5,  Att6, Att7 , Att8, Att9, Att10,
+                   Att11, Att12, Att13, Att14, Att15, Att16, Att17, Att18, Att19,Att20)
+             ~ -1 +  x + y, data = data_agg)
+summary(profit)
+coef(profit)
+str(profit)
+plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
+     pch = 19, ylim = c(-5.5, 5.5), xlim = c(-5.5, 5.5))
+text(x, y, labels = data_agg$Group.1, cex = 0.75, pos = 4)
+abline(h = 0, v = 0, col = "grey")
+arrows(x0 = c(0, 0, 0), y0 = c(0, 0, 0), 
+       x1 = coef(profit)[1, ]*10, y1 = coef(profit)[2, ]*10, col = 2, lwd = 1)
+text(t(coef(profit)*10), colnames(coef(profit)*10), cex=0.5, col = 1, pos = 4)
 
-summary(lm(cbind(colnames_att) ~ -1 +  x + y, data = data_agg))
