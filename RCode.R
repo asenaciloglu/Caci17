@@ -6,6 +6,7 @@ library(dplyr)
 install.packages("R.utils")
 library(R.utils)
 library(MASS)
+library(psych)
 
 
 cities = c("Prague","Geneva","Paris","Stockholm","Brussels","London","Amsterdam",
@@ -142,10 +143,17 @@ colnames(krakow) <- colnames
 colnames(st.petersburg) <- colnames
 colnames(madrid) <- colnames
 
-data_son <- rbind(prag, geneva, paris, stockholm, brussels, london, amsterdam, athens, riga, budapest,
-                  dublin, lisbon, istanbul, vienna, rome, barcelona, berlin, krakow, st.petersburg, madrid)              
+data_comb <- rbind(prag, geneva, paris, stockholm, brussels, london, amsterdam, athens, riga, budapest,
+                  dublin, lisbon, istanbul, vienna, rome, barcelona, berlin, krakow, st.petersburg, madrid) 
 
-data_agg <-aggregate(data_son[,-c(1)], by=list(data_son$City), mean, na.rm=TRUE)
+data_comb
+colnames(data_comb) <- c("Group.1", "Friendly", "Historical", "Affordable", "Trendy", "VibrantNightlife", 
+                        "Delicious Food", "Transportation", "Shopping", "Cultural Events", "Museums", 
+                        "Clean", "Green", "International", "Too Touristic", "Fun", "Noisy", 
+                        "Romantic", "Safe", "Beautiful", "English Speaker")
+
+
+data_agg <-aggregate(data_comb[,-c(1)], by=list(data_comb$City), mean, na.rm=TRUE)
 data_agg
 dist.df <- dist(data_agg[,-c(1)])
 dist.df
@@ -165,11 +173,6 @@ summary(lm(data_agg[,2]~-1+fit))
 print("asena")
 
 # Property fitting
-colnames(data_agg) <- c("Group.1", "Friendly", "Historical", "Affordable", "Trendy", "VibrantNightlife", 
-                        "Delicious Food", "Transportation", "Shopping", "Cultural Events", "Museums", 
-                        "Clean", "Green", "International", "Too Touristic", "Fun", "Noisy", 
-                        "Romantic", "Safe", "Beautiful", "English Speaker")
-
 data_agg$x <- x
 data_agg$y <- y
 data_agg
@@ -222,5 +225,36 @@ abline(h = 0, v = 0, col = "grey")
 
 points(x = coef[2, ], y = coef[3, ], col = 3)
 text(x= coef[2, ], y= coef[3, ], labels = colnames(coef), cex = 0.75, pos = 4,col=3)
+
+#PCA disaggregated dosyasindan
+#PCA
+data_comb <- na.omit(data_comb)
+eigen(cor(data_comb[,2:21]))$values
+plot(eigen(cor(data_comb[,2:21]))$values)
+data_comb
+a.pca<-principal(data_comb[,2:21],nfactors=4, rotate ="varimax")
+a.pca
+head(a.pca$scores)
+head(data_comb)
+aggregate(a.pca$scores, by=list(data_comb$Group.1), mean, na.rm=TRUE) # compute aggregate component score for cities
+t(a.pca$scores)%*%a.pca$scores/(nrow(data_comb[,2:21])-1) # show taht factors are uncorrelated
+
+# factor analysis
+a.fa<-fa(data_comb[,2:21],method=mle,scores='tenBerge', nfactors=4, rotate ="varimax")
+a.fa
+aggregate(a.fa$scores, by=list(data_comb$Group.1),mean, na.rm=TRUE) # compute aggregate component score for cities
+t(a.fa$scores)%*%a.fa$scores/(nrow(attribute[,2:21])-1) # show that factors are uncorrelated
+
+#COMPARE RESULTS WITH 2-DIMENSIONAL MDS
+a.fa<-fa(data_comb[,2:21],method=mle,scores='tenBerge', nfactors=2, rotate ="varimax")
+a.fa
+scores<-aggregate(a.fa$scores, by=list(data_comb$Group.1),mean, na.rm=TRUE)
+x <- scores[,2]
+y <- scores[,3]
+plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
+     pch = 19, ylim = c(-2, 2), xlim = c(-2, 2))
+text(x, y, labels = scores[,1], cex = 1, pos = 4)
+abline(h = 0, v = 0, col = "grey")
+
 
 
