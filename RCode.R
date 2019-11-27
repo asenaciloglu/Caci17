@@ -116,10 +116,55 @@ head(st.petersburg)
 liste <- list(prag, geneva, paris, stockholm, amsterdam, st.petersburg, barcelona, budapest, brussels, berlin, 
               istanbul, athens, dublin, krakow, rome, london, riga, madrid, vienna, lisbon)
 
-
-
 colnames <- sub('.*_', '', colnames(prag))
-colnames   
-lapply(liste, setNames, nm = colnames)
+colnames  
+colnames(prag) <- colnames
+colnames(geneva) <- colnames
+colnames(paris) <- colnames
+colnames(stockholm) <- colnames
+colnames(brussels) <- colnames
+colnames(london) <- colnames
+colnames(amsterdam) <- colnames
+colnames(athens) <- colnames
+colnames(riga) <- colnames
+colnames(budapest) <- colnames
+colnames(dublin) <- colnames
+colnames(lisbon) <- colnames
+colnames(istanbul) <- colnames
+colnames(vienna) <- colnames
+colnames(rome) <- colnames
+colnames(barcelona) <- colnames
+colnames(berlin) <- colnames
+colnames(krakow) <- colnames
+colnames(st.petersburg) <- colnames
+colnames(madrid) <- colnames
+
+data_son <- rbind(prag, geneva, paris, stockholm, brussels, london, amsterdam, athens, riga, budapest,
+                  dublin, lisbon, istanbul, vienna, rome, barcelona, berlin, krakow, st.petersburg, madrid)              
+
+data_agg <-aggregate(data_son[,-c(1)], by=list(data_son$City), mean, na.rm=TRUE)
+data_agg
+dist.df <- dist(data_agg[,-c(1)])
+dist.df
+fit <- cmdscale(dist.df, k = 2)
+fit
+
+x <- fit[,1]
+y <- fit[,2]
+
+plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
+     pch = 19, ylim = c(-5.5, 5.5), xlim = c(-5.5, 5.5))
+text(x, y, labels = data_agg$Group.1, cex = 1, pos = 4)
+abline(h = 0, v = 0, col = "grey")
+
+summary(lm(data_agg[,2]~-1+fit))
 
 print("asena")
+
+# Property fitting
+attribute.agg.eval.df$x <- x
+attribute.agg.eval.df$y <- y
+attribute.agg.eval.df$q <- x*x+y*y
+attribute.agg.eval.df$indpref <- indpref
+attribute.agg.eval.df
+summary(lm(indpref ~ -1 +  x + y, data = attribute.agg.eval.df))
