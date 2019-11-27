@@ -1,6 +1,6 @@
 getwd()
-# setwd("/Users/edanurkahvecioglu/Desktop/3.Donem/CACII/SPW1")
-data <- read.csv("QuestionaireData_CityTrips_csv.csv")
+setwd("~/Caci17")
+data <- read.csv("QuestionaireData_CityTrips.csv")
 head(data)
 library(dplyr)
 
