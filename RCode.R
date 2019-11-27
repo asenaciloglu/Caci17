@@ -3,6 +3,8 @@ setwd("~/Caci17")
 data <- read.csv("QuestionaireData_CityTrips.csv")
 head(data)
 library(dplyr)
+install.packages("R.utils")
+library(R.utils)
 
 
 cities = c("Prague","Geneva","Paris","Stockholm","Brussels","London","Amsterdam",
@@ -162,9 +164,13 @@ summary(lm(data_agg[,2]~-1+fit))
 print("asena")
 
 # Property fitting
-attribute.agg.eval.df$x <- x
-attribute.agg.eval.df$y <- y
-attribute.agg.eval.df$q <- x*x+y*y
-attribute.agg.eval.df$indpref <- indpref
-attribute.agg.eval.df
-summary(lm(indpref ~ -1 +  x + y, data = attribute.agg.eval.df))
+data_agg$x <- x
+data_agg$y <- y
+data_agg$q <- x*x+y*y
+data_agg$indpref <- indpref
+data_agg
+
+colnames_att <- colnames[2:21]
+colnames_att <- paste(colnames_att, sep = ",")
+
+summary(lm(cbind(colnames_att) ~ -1 +  x + y, data = data_agg))
