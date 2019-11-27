@@ -4,7 +4,6 @@ data <- read.csv("QuestionaireData_CityTrips_csv.csv")
 head(data)
 library(dplyr)
 
-ALKSJDLASJDSKLLKAJKLAD
 
 cities = c("Prague","Geneva","Paris","Stockholm","Brussels","London","Amsterdam",
            "Athens","Riga","Budapest","Dublin","Lisbon","Istanbul","Vienna","Rome","Barcelona",
@@ -116,6 +115,8 @@ head(st.petersburg)
 
 liste <- list(prag, geneva, paris, stockholm, amsterdam, st.petersburg, barcelona, budapest, brussels, berlin, 
               istanbul, athens, dublin, krakow, rome, london, riga, madrid, vienna, lisbon)
+
+
 
 colnames <- sub('.*_', '', colnames(prag))
 colnames   
