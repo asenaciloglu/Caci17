@@ -2,12 +2,15 @@ getwd()
 setwd("~/Caci17")
 data <- read.csv("QuestionaireData_CityTrips.csv")
 head(data)
-library(dplyr)
 install.packages("R.utils")
+install.packages("corrplot")
+install.packages("GPArotation")
+library(dplyr)
 library(R.utils)
 library(MASS)
 library(psych)
-
+library(corrplot)
+library(GPArotation)
 
 cities = c("Prague","Geneva","Paris","Stockholm","Brussels","London","Amsterdam",
            "Athens","Riga","Budapest","Dublin","Lisbon","Istanbul","Vienna","Rome","Barcelona",
@@ -226,6 +229,10 @@ abline(h = 0, v = 0, col = "grey")
 points(x = coef[2, ], y = coef[3, ], col = 3)
 text(x= coef[2, ], y= coef[3, ], labels = colnames(coef), cex = 0.75, pos = 4,col=3)
 
+
+### PCA'ye gecmeden property fittingde yapmadiklarimiz var.
+
+
 #PCA disaggregated dosyasindan
 #PCA
 data_comb <- na.omit(data_comb)
@@ -255,6 +262,128 @@ plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS",
      pch = 19, ylim = c(-2, 2), xlim = c(-2, 2))
 text(x, y, labels = scores[,1], cex = 1, pos = 4)
 abline(h = 0, v = 0, col = "grey")
+
+#Di??er doasyadan (TV stations vard??)
+
+corrplot(corr=cor(data_comb[,2:21],use ="complete.obs"), method ="ellipse")
+eigen(cor(data_comb[,2:21]))$values
+plot(eigen(cor(data_comb[,2:21]))$values)
+
+# START: Princial component analysis with singular value decomposition, no rotation
+a.svd<-svd(cor(data_comb[,2:21]))
+a.svd
+d<-diag(a.svd$d)
+d
+a<-a.svd$u[,1:3]%*%sqrt(d[1:3,1:3])
+a
+
+a.svd$u[,1:3]%*%d[1:3,1:3]%*%t(a.svd$u[,1:3]) # Recomputed correlation based on first 3 principal components
+cor(data_comb[,2:21])
+diag(t(a.svd$u)%*%a.svd$u%*%d%*%t(a.svd$u)%*%a.svd$u)
+
+
+# START: Princial component analysis with r-function prcomp, no rotation
+data.scale<-apply(data_comb[,2:21],2,scale)
+pr<-prcomp(data.scale)
+?prcomp
+pr
+str(pr)
+t(pr$sdev*t(pr$rotation)) # labeled as rotated but it is not rotated
+# START: Princial component analysis with r-function prcomp, no rotation
+
+# PCA and Factor analysis with easy to do R-FUNCTIONS
+library(psych)
+a.pca<-principal(data_comb[,2:21],nfactors=3, rotate ="none")
+str(a.pca)
+a.pca
+a.pca<-principal(data_comb[,2:21],nfactors=3, rotate ="varimax")
+a.pca
+head(a.pca$score)
+nrow(a.pca$score)
+t(a.pca$scores)%*%a.pca$scores/(nrow(data_comb[,2:21])-1) # demonstrate that the principal components are uncorrelated after rotation
+aggregate(a.pca$scores, by=list(data_comb$Group.1),mean, na.rm=TRUE)
+
+summary(lm( Friendly ~ Historical+ Affordable+ Trendy+ VibrantNightlife+ 
+                   `Delicious Food`+ Transportation+ Shopping+ `Cultural Events`+ Museums+ 
+                   Clean+ Green+ International + `Too Touristic`+ Fun+ Noisy+ 
+                   Romantic+ Safe+ Beautiful+ `English Speaker`, data=data_comb))
+
+# factor analysis
+?fa
+a.fa<-fa(data_comb[,2:21],method=ml, SMC=TRUE, scores='regression',nfactors=3, rotate ="varimax")
+a.fa<-fa(data_comb[,2:21],nfactors=3,rotate='varimax') # default setting
+a.fa
+
+
+# calculate factor score for objects
+str(a.pca)
+a.pca$scores
+aggregate(a.fa$scores, by=list(data_comb$Group.1),mean, na.rm=TRUE)
+
+# demonstrate that the factors after rotation are uncorrelated
+a.fa.rot <-fa(data_comb[,2:21], scores='tenBerge',SMC=TRUE, fm='pa', nfactors =3,rotate ="varimax")
+a.fa.rot
+t(a.fa.rot$scores)%*%a.fa.rot$scores/(nrow(data_comb[,2:21])-1)
+a.fa.rot$rot.mat
+t(a.fa.rot$rot.mat)%*%a.fa.rot$rot.mat
+?fa
+
+# Oblique rotation
+library(GPArotation)
+
+a.fa.oblique<-fa(data_comb[,2:21],nfactors=3, scores='tenBerge', rotate ="oblimin")
+a.fa.oblique
+a.fa.oblique$Structure # correlation between variables and factors
+a.fa.oblique$loadings # pattern (association) between variables and factors
+
+cor(data_comb[,2:21])
+a.fa$Structure
+a.fa$Structure%*%t(a.fa$Structure)
+a.fa$loadings%*%t(a.fa$loadings)
+t(a.fa$scores)%*%a.fa$scores/nrow(data_comb[,2:21]-1)
+
+a.pca.oblirot <-principal(data_comb[,2:21], nfactors =3,rotate ="oblimin")
+a.pca.oblirot
+a.pca.oblirot$loadings
+a.pca.oblirot$Structure
+a.z <- apply(data_comb[,2:21],2,scale)
+str(a.z)
+t(a.z)%*%a.z/(nrow(data_comb[,2:21])-1)
+
+pattern<-solve(t(a.pca.oblirot$scores)%*%a.pca.oblirot$scores/(nrow(data_comb[,2:21])-1))%*%t(a.pca.oblirot$scores)%*%a.z/(nrow(data_comb[,2:21])-1)
+structure<-t(a.pca.oblirot$scores)%*%a.pca.oblirot$scores%*%pattern/(nrow(data_comb[,2:21])-1)
+structure
+pattern
+t(a.pca.oblirot$loadings)
+t(a.pca.oblirot$Structure)
+t(a.pca.oblirot$scores)%*%a.pca.oblirot$scores/(nrow(data_comb[,2:21])-1)
+
+
+
+#### burda bitirdik
+
+# START: Principal Component Analysis of aggregated data with SVD, no rotation 
+attribute.agg.svd<-svd(cor(attribute.agg.eval.df[,2:15]))
+l<-attribute.agg.svd$u*(sqrt(attribute.agg.svd$d))
+l
+attribute.agg.svd$d
+attribute.agg.svd$u
+attribute.agg.svd$u*t(sqrt(attribute.agg.svd$d))%x%matrix(1,nrow=14,ncol=1)
+# END: Principal Component Analysis of aggregated data with SVD, no rotation 
+
+eigen(cor(attribute.agg.eval.df[,2:15]))$values
+
+
+a.pca<-principal(attribute.agg.eval.df[,2:15],nfactors=2, rotate ="varimax")
+a.pca
+head(attribute.agg.eval.df)
+aggregate(a.pca$scores, by=list(attribute.agg.eval.df$Group.1),mean, na.rm=TRUE)
+a.pca$scores
+
+r1<-qr(cor(attribute.agg.eval.df[,2:15]))
+r2<-qr(cor(attribute.eval.df[,3:16]))
+r1$rank
+r2$rank
 
 
 
