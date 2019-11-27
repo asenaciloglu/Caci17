@@ -164,12 +164,22 @@ summary(lm(data_agg[,2]~-1+fit))
 print("asena")
 
 # Property fitting
+colnames(data_agg) <- c("Group.1", "Friendly", "Historical", "Affordable", "Trendy", "VibrantNightlife", 
+                        "Delicious Food", "Transportation", "Shopping", "Cultural Events", "Museums", 
+                        "Clean", "Green", "International", "Too Touristic", "Fun", "Noisy", 
+                        "Romantic", "Safe", "Beautiful", "English Speaker")
+
 data_agg$x <- x
 data_agg$y <- y
 data_agg
 
-profit <- lm(cbind(Att1,  Att2, Att3, Att4, Att5,  Att6, Att7 , Att8, Att9, Att10,
-                   Att11, Att12, Att13, Att14, Att15, Att16, Att17, Att18, Att19,Att20)
+
+head(data_agg)
+
+profit <- lm(cbind(Friendly, Historical, Affordable, Trendy, VibrantNightlife, 
+                   `Delicious Food`, Transportation, Shopping, `Cultural Events`, Museums, 
+                   Clean, Green, International, `Too Touristic`, Fun, Noisy, 
+                   Romantic, Safe, Beautiful, `English Speaker`)
              ~ -1 +  x + y, data = data_agg)
 summary(profit)
 coef(profit)
@@ -181,4 +191,9 @@ abline(h = 0, v = 0, col = "grey")
 arrows(x0 = c(0, 0, 0), y0 = c(0, 0, 0), 
        x1 = coef(profit)[1, ]*10, y1 = coef(profit)[2, ]*10, col = 2, lwd = 1)
 text(t(coef(profit)*10), colnames(coef(profit)*10), cex=0.5, col = 1, pos = 4)
+
+column_names = c("Friendly", "Historical", "Affordable", "Trendy", "Vibrant Nightlife", "Delicious Food", "Transportation", "Shopping", "Cultural Events", "Museums", "Clean", "Green", "International", "Too Touristic", "Fun", "Noisy", "Romantic", "Safe", "Beautiful", "English-Speaker")
+column_names
+
+
 
