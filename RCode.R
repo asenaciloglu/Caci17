@@ -119,3 +119,5 @@ liste <- list(prag, geneva, paris, stockholm, amsterdam, st.petersburg, barcelon
 colnames <- sub('.*_', '', colnames(prag))
 colnames   
 lapply(liste, setNames, nm = colnames)
+
+print(colnames)
