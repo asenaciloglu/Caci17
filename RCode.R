@@ -195,5 +195,27 @@ text(t(coef(profit)*10), colnames(coef(profit)*10), cex=0.5, col = 1, pos = 4)
 column_names = c("Friendly", "Historical", "Affordable", "Trendy", "Vibrant Nightlife", "Delicious Food", "Transportation", "Shopping", "Cultural Events", "Museums", "Clean", "Green", "International", "Too Touristic", "Fun", "Noisy", "Romantic", "Safe", "Beautiful", "English-Speaker")
 column_names
 
+#Property Fitting with q
+data_agg$q <- x*x+y*y
 
+profit_q <- lm(cbind(Friendly, Historical, Affordable, Trendy, VibrantNightlife, 
+                   `Delicious Food`, Transportation, Shopping, `Cultural Events`, Museums, 
+                   Clean, Green, International, `Too Touristic`, Fun, Noisy, 
+                   Romantic, Safe, Beautiful, `English Speaker`)
+             ~ 1 +  x + y + q, data = data_agg)
+summary(profit_q)
+
+coef<-coef(profit_q)
+coef
+coef[2,]<-coef[2,]/(2*coef[4,])
+coef[3,]<-coef[3,]/(2*coef[4,])
+
+coef
+plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
+     pch = 19, ylim = c(-5.5, 5.5), xlim = c(-5.5, 5.5))
+text(x, y, labels = data_agg$Group.1, cex = 0.75, pos = 4)
+abline(h = 0, v = 0, col = "grey")
+
+points(x = coef[2, ], y = coef[3, ], col = 3)
+text(x= coef[2, ], y= coef[3, ], labels = colnames(coef), cex = 0.75, pos = 4,col=3)
 
