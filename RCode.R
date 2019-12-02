@@ -160,13 +160,14 @@ data_agg <-aggregate(data_comb[,-c(1)], by=list(data_comb$Group.1), mean, na.rm=
 data_agg
 dist.df <- dist(data_agg[,-c(1)])
 dist.df
+<<<<<<< HEAD
 
 dst <- data.matrix(dist.df)
 dim <- ncol(dst)
 
 # distance/similarity matrix grafik cizme
 # Open a pdf file
-# df("distanceMatrix.pdf") # bu kodu run ettikten sonra kapatmassan, grafik gozukmez R'de sadece dosyaya kaydeder
+pdf("distanceMatrix.pdf") # bu kodu run ettikten sonra kapatmassan, grafik gozukmez R'de sadece dosyaya kaydeder
 # eger grafigi gormek istiyosan bu kodu run etme!
 
 # Create a plot
@@ -178,9 +179,9 @@ axis(2, 1:dim, data_agg[1:20,1], cex.axis = 0.5, las=1)
 text(expand.grid(1:dim, 1:dim), sprintf("%0.1f", dst), cex=0.6)
 
 # Close the pdf file
-# dev.off() 
+dev.off() 
 
-fit <- cmdscale(dist.df, k = 2)
+fit <- cmdscale(dist.df, k = 2) #izdusum
 fit
 
 
