@@ -264,9 +264,10 @@ t(a.pca$scores)%*%a.pca$scores/(nrow(data_comb[,2:21])-1) # show that factors ar
 
 # factor analysis
 #### finding the optimal number of factors
+pdf("Parallel_Analysis_Scree_Plots.pdf")
 parallel <- fa.parallel(data_comb[,2:21], fm = 'minres', fa = 'fa')
 parallel
-
+dev.off()
 # bu obsolete a.fa<-fa(data_comb[,2:21],nfactors = 6,rotate = "oblimin",fm="minres")
 a.fa<-fa(data_comb[,2:21],method=mle,scores='tenBerge',
          nfactors=6, rotate ="varimax")
