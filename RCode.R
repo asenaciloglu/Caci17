@@ -156,7 +156,7 @@ colnames(data_comb) <- c("Group.1", "Friendly", "Historical", "Affordable", "Tre
                         "Romantic", "Safe", "Beautiful", "English Speaker")
 
 
-data_agg <-aggregate(data_comb[,-c(1)], by=list(data_comb$City), mean, na.rm=TRUE)
+data_agg <-aggregate(data_comb[,-c(1)], by=list(data_comb$Group.1), mean, na.rm=TRUE)
 data_agg
 dist.df <- dist(data_agg[,-c(1)])
 dist.df
