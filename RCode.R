@@ -160,7 +160,7 @@ data_agg <-aggregate(data_comb[,-c(1)], by=list(data_comb$Group.1), mean, na.rm=
 data_agg
 dist.df <- dist(data_agg[,-c(1)])
 dist.df
-fit <- cmdscale(dist.df, k = 2)
+fit <- cmdscale(dist.df, k = 2) #izdusum
 fit
 
 x <- fit[,1]
