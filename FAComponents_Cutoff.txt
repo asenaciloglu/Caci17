@@ -1,0 +1,28 @@
+
+Loadings:
+                  MR1    MR2    MR6    MR3    MR4    MR5   
+Friendly                  0.453                0.309       
+Historical                       0.502  0.378  0.309       
+Affordable                                     0.620       
+Trendy             0.719                                   
+Vibrant Nightlife  0.839                                   
+Delicious Food                          0.422              
+Transportation     0.294  0.364                            
+Shopping           0.451                                   
+Cultural Events    0.345         0.729                     
+Museums                          0.742                     
+Clean                     0.748                            
+Green                     0.566                            
+International      0.488                              0.460
+Too Touristic      0.322                0.292         0.427
+Fun                0.617                                   
+Noisy              0.321 -0.515                       0.394
+Romantic                                0.713              
+Safe                      0.723                            
+Beautiful                 0.313         0.622              
+English Speaker    0.297  0.562                       0.288
+
+                 MR1   MR2   MR6   MR3   MR4   MR5
+SS loadings    2.838 2.588 1.825 1.688 0.834 0.766
+Proportion Var 0.142 0.129 0.091 0.084 0.042 0.038
+Cumulative Var 0.142 0.271 0.363 0.447 0.489 0.527
