@@ -263,21 +263,20 @@ aggregate(a.pca$scores, by=list(data_comb$Group.1), mean, na.rm=TRUE) # compute 
 t(a.pca$scores)%*%a.pca$scores/(nrow(data_comb[,2:21])-1) # show that factors are uncorrelated
 
 # factor analysis
-a.fa<-fa(data_comb[,2:21],method=mle,scores='tenBerge', nfactors=4, rotate ="varimax")
-a.fa
-aggregate(a.fa$scores, by=list(data_comb$Group.1),mean, na.rm=TRUE) # compute aggregate component score for cities
-t(a.fa$scores)%*%a.fa$scores/(nrow(data_comb[,2:21])-1) # show that factors are uncorrelated
-
-
 #### finding the optimal number of factors
-
 parallel <- fa.parallel(data_comb[,2:21], fm = 'minres', fa = 'fa')
 parallel
 
-#COMPARE RESULTS WITH 2-DIMENSIONAL MDS
-a.fa<-fa(data_comb[,2:21],method=mle,scores='tenBerge', nfactors=2, rotate ="varimax")
+# bu obsolete a.fa<-fa(data_comb[,2:21],nfactors = 6,rotate = "oblimin",fm="minres")
+a.fa<-fa(data_comb[,2:21],method=mle,scores='tenBerge',
+         nfactors=6, rotate ="varimax")
 a.fa
-scores<-aggregate(a.fa$scores, by=list(data_comb$Group.1),mean, na.rm=TRUE)
+t(a.fa$scores)%*%a.fa$scores/(nrow(data_comb[,2:21])-1) # show that factors are uncorrelated
+print(a.fa$loadings,cutoff = 0.34 )
+capture.output(print(a.fa$loadings,cutoff = 0.281 ), file = "FAComponents_Cutoff.txt")
+
+
+hscores<-aggregate(a.fa$scores, by=list(data_comb$Group.1),mean, na.rm=TRUE)
 x <- scores[,2]
 y <- scores[,3]
 plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
@@ -287,7 +286,7 @@ abline(h = 0, v = 0, col = "grey")
 
 #Di??er doasyadan (TV stations vard??)
 
-corrplot(corr=cor(data_comb[,2:21],use ="complete.obs"), method ="ellipse")
+corrplot(corr=cor(data_comb[,2:21], use ="complete.obs"), method ="ellipse")
 eigen(cor(data_comb[,2:21]))$values
 plot(eigen(cor(data_comb[,2:21]))$values)
 
