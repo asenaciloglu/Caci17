@@ -185,11 +185,12 @@ fit
 
 x <- fit[,1]
 y <- fit[,2]
-
+#pdf("metrics_MDS.pdf")
 plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
-     pch = 19, ylim = c(-5.5, 5.5), xlim = c(-5.5, 5.5))
-text(x, y, labels = data_agg$Group.1, cex = 1, pos = 4)
+     pch = 20, ylim = c(-5.5, 5.5), xlim = c(-5.5, 5.5))
+text(x, y, labels = data_agg$Group.1, cex = 0.5, pos = 3)
 abline(h = 0, v = 0, col = "grey")
+#dev.off()
 
 summary(lm(data_agg[,2]~-1+fit))
 
@@ -211,14 +212,15 @@ profit <- lm(cbind(Friendly, Historical, Affordable, Trendy, `Vibrant Nightlife`
 summary(profit)
 coef(profit)
 str(profit)
+
 #pdf("Property_Fitting_xy.pdf")
 plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
      pch = 19, ylim = c(-5.5, 5.5), xlim = c(-5.5, 5.5))
-text(x, y, labels = data_agg$Group.1, cex = 0.75, pos = 4)
+text(x, y, labels = data_agg$Group.1, cex = 0.5, pos = 3)
 abline(h = 0, v = 0, col = "grey")
 arrows(x0 = c(0, 0, 0), y0 = c(0, 0, 0), 
        x1 = coef(profit)[1, ]*10, y1 = coef(profit)[2, ]*10, col = 2, lwd = 1)
-text(t(coef(profit)*10), colnames(coef(profit)*10), cex=0.5, col = 1, pos = 4)
+text(t(coef(profit)*10), colnames(coef(profit)*10), cex=0.4, col = 2, pos = c(2,2))
 #dev.off()
 
 #Property Fitting with ideal points
@@ -236,14 +238,14 @@ coef
 coef[2,]<-coef[2,]/(-2*coef[4,])
 coef[3,]<-coef[3,]/(-2*coef[4,])
 
-#pdf("Property_Fitting_xy_q.pdf")
-plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
-     pch = 19, ylim = c(-15, 15), xlim = c(-15, 15))
-text(x, y, labels = data_agg$Group.1, cex = 0.75, pos = 4)
+# pdf("Property_Fitting_xy_q.pdf")
+plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Property  MDS", 
+     pch = "*", ylim = c(-10.5, 11), xlim = c(-11, 11), col = "green")
+text(x, y, labels = data_agg$Group.1, cex = 0.4, pos = 3, col = 3)
 abline(h = 0, v = 0, col = "grey")
-points(x = coef[2, ], y = coef[3, ], col = 3)
-text(x= coef[2, ], y= coef[3, ], labels = colnames(coef), cex = 0.75, pos = 4,col=3)
-#dev.off()
+points(x = coef[2, ], y = coef[3, ], col = 1)
+text(x= coef[2, ], y = coef[3, ], labels = colnames(coef), cex = 0.5, pos = 2,col=1)
+# dev.off()
 
 ### PCA'ye gecmeden property fittingde yapmadiklarimiz var.
 
