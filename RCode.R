@@ -268,6 +268,12 @@ a.fa
 aggregate(a.fa$scores, by=list(data_comb$Group.1),mean, na.rm=TRUE) # compute aggregate component score for cities
 t(a.fa$scores)%*%a.fa$scores/(nrow(data_comb[,2:21])-1) # show that factors are uncorrelated
 
+
+#### finding the optimal number of factors
+
+parallel <- fa.parallel(data_comb[,2:21], fm = 'minres', fa = 'fa')
+parallel
+
 #COMPARE RESULTS WITH 2-DIMENSIONAL MDS
 a.fa<-fa(data_comb[,2:21],method=mle,scores='tenBerge', nfactors=2, rotate ="varimax")
 a.fa
