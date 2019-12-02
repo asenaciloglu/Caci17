@@ -249,7 +249,6 @@ text(x= coef[2, ], y = coef[3, ], labels = colnames(coef), cex = 0.5, pos = 2,co
 
 ### PCA'ye gecmeden property fittingde yapmadiklarimiz var.
 
-
 #PCA disaggregated dosyasindan
 #PCA
 data_comb <- na.omit(data_comb)
@@ -261,13 +260,13 @@ a.pca
 head(a.pca$scores)
 head(data_comb)
 aggregate(a.pca$scores, by=list(data_comb$Group.1), mean, na.rm=TRUE) # compute aggregate component score for cities
-t(a.pca$scores)%*%a.pca$scores/(nrow(data_comb[,2:21])-1) # show taht factors are uncorrelated
+t(a.pca$scores)%*%a.pca$scores/(nrow(data_comb[,2:21])-1) # show that factors are uncorrelated
 
 # factor analysis
 a.fa<-fa(data_comb[,2:21],method=mle,scores='tenBerge', nfactors=4, rotate ="varimax")
 a.fa
 aggregate(a.fa$scores, by=list(data_comb$Group.1),mean, na.rm=TRUE) # compute aggregate component score for cities
-t(a.fa$scores)%*%a.fa$scores/(nrow(attribute[,2:21])-1) # show that factors are uncorrelated
+t(a.fa$scores)%*%a.fa$scores/(nrow(data_comb[,2:21])-1) # show that factors are uncorrelated
 
 #COMPARE RESULTS WITH 2-DIMENSIONAL MDS
 a.fa<-fa(data_comb[,2:21],method=mle,scores='tenBerge', nfactors=2, rotate ="varimax")
