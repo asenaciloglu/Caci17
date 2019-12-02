@@ -150,7 +150,7 @@ data_comb <- rbind(prag, geneva, paris, stockholm, brussels, london, amsterdam, 
                   dublin, lisbon, istanbul, vienna, rome, barcelona, berlin, krakow, st.petersburg, madrid) 
 
 data_comb
-colnames(data_comb) <- c("Group.1", "Friendly", "Historical", "Affordable", "Trendy", "VibrantNightlife", 
+colnames(data_comb) <- c("Group.1", "Friendly", "Historical", "Affordable", "Trendy", "Vibrant Nightlife", 
                         "Delicious Food", "Transportation", "Shopping", "Cultural Events", "Museums", 
                         "Clean", "Green", "International", "Too Touristic", "Fun", "Noisy", 
                         "Romantic", "Safe", "Beautiful", "English Speaker")
@@ -171,7 +171,7 @@ dim <- ncol(dst)
 
 # Create a plot
 image(1:dim, 1:dim, dst, axes = FALSE, xlab="", ylab="", 
-      col = gray.colors(12, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL, rev = FALSE))
+      col = gray.colors(12, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL))
 
 axis(1, 1:dim, data_agg[1:20,1], cex.axis = 0.5, las=3)
 axis(2, 1:dim, data_agg[1:20,1], cex.axis = 0.5, las=1)
@@ -182,8 +182,6 @@ text(expand.grid(1:dim, 1:dim), sprintf("%0.1f", dst), cex=0.6)
 
 fit <- cmdscale(dist.df, k = 2) #izdusum
 fit
-
-
 
 x <- fit[,1]
 y <- fit[,2]
@@ -205,7 +203,7 @@ data_agg
 
 head(data_agg)
 
-profit <- lm(cbind(Friendly, Historical, Affordable, Trendy, VibrantNightlife, 
+profit <- lm(cbind(Friendly, Historical, Affordable, Trendy, `Vibrant Nightlife`, 
                    `Delicious Food`, Transportation, Shopping, `Cultural Events`, Museums, 
                    Clean, Green, International, `Too Touristic`, Fun, Noisy, 
                    Romantic, Safe, Beautiful, `English Speaker`)
@@ -213,6 +211,7 @@ profit <- lm(cbind(Friendly, Historical, Affordable, Trendy, VibrantNightlife,
 summary(profit)
 coef(profit)
 str(profit)
+#pdf("Property_Fitting_xy.pdf")
 plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
      pch = 19, ylim = c(-5.5, 5.5), xlim = c(-5.5, 5.5))
 text(x, y, labels = data_agg$Group.1, cex = 0.75, pos = 4)
@@ -220,12 +219,7 @@ abline(h = 0, v = 0, col = "grey")
 arrows(x0 = c(0, 0, 0), y0 = c(0, 0, 0), 
        x1 = coef(profit)[1, ]*10, y1 = coef(profit)[2, ]*10, col = 2, lwd = 1)
 text(t(coef(profit)*10), colnames(coef(profit)*10), cex=0.5, col = 1, pos = 4)
-
-column_names = c("Friendly", "Historical", "Affordable", "Trendy", "Vibrant Nightlife", 
-                 "Delicious Food", "Transportation", "Shopping", "Cultural Events", "Museums", 
-                 "Clean", "Green", "International", "Too Touristic", "Fun", "Noisy", "Romantic", 
-                 "Safe", "Beautiful", "English-Speaker")
-column_names
+#dev.off()
 
 #Property Fitting with ideal points
 data_agg$q <- x*x+y*y
@@ -242,15 +236,14 @@ coef
 coef[2,]<-coef[2,]/(-2*coef[4,])
 coef[3,]<-coef[3,]/(-2*coef[4,])
 
-coef
+#pdf("Property_Fitting_xy_q.pdf")
 plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
      pch = 19, ylim = c(-15, 15), xlim = c(-15, 15))
 text(x, y, labels = data_agg$Group.1, cex = 0.75, pos = 4)
 abline(h = 0, v = 0, col = "grey")
-
 points(x = coef[2, ], y = coef[3, ], col = 3)
 text(x= coef[2, ], y= coef[3, ], labels = colnames(coef), cex = 0.75, pos = 4,col=3)
-
+#dev.off()
 
 ### PCA'ye gecmeden property fittingde yapmadiklarimiz var.
 
