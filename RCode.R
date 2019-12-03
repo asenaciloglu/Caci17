@@ -310,7 +310,7 @@ str(profit.factor)
 
 pdf("Factor Analysis_xy.pdf")
 plot(x.factor, y.factor, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
-     pch = ".", ylim = c(-5, 5), xlim = c(-5, 5))
+     pch = ".", ylim = c(-4, 4), xlim = c(-4, 4))
 text(x.factor, y.factor, labels = hscores$Group.1, cex = 0.5, pos = 3)
 abline(h = 0, v = 0, col = "grey")
 arrows(x0 = c(0, 0, 0), y0 = c(0, 0, 0), 
