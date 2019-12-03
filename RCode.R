@@ -273,11 +273,10 @@ a.fa<-fa(data_comb[,2:21],method=mle,scores='tenBerge',
          nfactors=6, rotate ="varimax")
 a.fa
 print(a.fa$loadings,cutoff = 0.34 )
-capture.output(print(a.fa$loadings,cutoff = 0.281 ), file = "FAComponents_Cutoff.txt")
-
+#capture.output(print(a.fa$loadings,cutoff = 0.281 ), file = "FAComponents_Cutoff.txt")
 
 t(a.fa$scores)%*%a.fa$scores/(nrow(data_comb[,2:21])-1) # show that factors are uncorrelated
-capture.output(print(t(a.fa$scores)%*%a.fa$scores/(nrow(data_comb[,2:21])-1)), file = "t_scores_factor.txt")
+#capture.output(print(t(a.fa$scores)%*%a.fa$scores/(nrow(data_comb[,2:21])-1)), file = "t_scores_factor.txt")
 
 hscores<-aggregate(a.fa$scores, by=list(data_comb$Group.1),mean, na.rm=TRUE)
 hscores
@@ -292,8 +291,8 @@ x.factor <- fit.factor[,1]
 y.factor <- fit.factor[,2]
 
 plot(x.factor, y.factor, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
-     pch = 19, ylim = c(-2, 2), xlim = c(-2, 2))
-text(x.factor, y.factor, labels = scores[,1], cex = 1, pos = 4)
+     pch = 19, ylim = c(-3, 3), xlim = c(-3, 3))
+text(x.factor, y.factor, labels = hscores[,1], cex = 1, pos = 4)
 abline(h = 0, v = 0, col = "grey")
 
 hscores$x.factor <- x.factor
@@ -309,21 +308,15 @@ str(profit.factor)
 
 #pdf("Factor Analysis_xy.pdf")
 plot(x.factor, y.factor, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
-     pch = 19, ylim = c(-7.5, 7.5), xlim = c(-7.5, 7.5))
+     pch = ".", ylim = c(-7.5, 7.5), xlim = c(-7.5, 7.5))
 text(x.factor, y.factor, labels = hscores$Group.1, cex = 0.5, pos = 3)
 abline(h = 0, v = 0, col = "grey")
 arrows(x0 = c(0, 0, 0), y0 = c(0, 0, 0), 
-       x1 = coef(profit.factor)[1, ]*10, y1 = coef(profit.factor)[2, ]*10, col = 2, lwd = 1)
-text(t(coef(profit.factor)*10), colnames(coef(profit.factor)*10), cex=0.4, col = 2, pos = c(2,2))
+       x1 = coef(profit.factor)[1, ]*5, y1 = coef(profit.factor)[2, ]*5, col = 2, lwd = 1)
+text(t(coef(profit.factor)*5), colnames(coef(profit.factor)*5), cex=0.4, col = 2, pos = c(3,2))
 #dev.off()
 
 # Factor Analysis bitti.
-
-
-
-
-
-
 
 
 #Di??er doasyadan (TV stations vard??)
