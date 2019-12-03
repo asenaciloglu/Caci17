@@ -297,18 +297,23 @@ plot(x.factor, y.factor, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "M
 text(x.factor, y.factor, labels = hscores[,1], cex = 1, pos = 4)
 abline(h = 0, v = 0, col = "grey")
 
+colnames_hscores <- c("Attributes", "Active City Life/Fun", "Secure/Green Areas",
+                      "Culture/History", "Romance/Beauty", "Affordability", "Crowd/Noise")
+colnames(hscores) <- colnames_hscores
+hscores
+
 hscores$x.factor <- x.factor
 hscores$y.factor <- y.factor
 hscores
 
-profit.factor <- lm(cbind(MR1, MR2, MR3,
-                          MR4, MR5, MR6)
+profit.factor <- lm(cbind(`Active City Life/Fun`, `Secure/Green Areas`,
+                          `Culture/History`, `Romance/Beauty`, `Affordability`, `Crowd/Noise`)
              ~ -1 +  x.factor + y.factor, data = hscores)
 summary(profit.factor)
 coef(profit.factor)
 str(profit.factor)
 
-pdf("Factor Analysis_xy.pdf")
+pdf("Factor_Analysis_xy.pdf")
 plot(x.factor, y.factor, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
      pch = ".", ylim = c(-4, 4), xlim = c(-4, 4))
 text(x.factor, y.factor, labels = hscores$Group.1, cex = 0.5, pos = 3)
