@@ -316,7 +316,7 @@ str(profit.factor)
 pdf("Factor_Analysis_xy.pdf")
 plot(x.factor, y.factor, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
      pch = ".", ylim = c(-4, 4), xlim = c(-4, 4))
-text(x.factor, y.factor, labels = hscores$Group.1, cex = 0.5, pos = 3)
+text(x.factor, y.factor, labels = hscores$Attributes, cex = 0.5, pos = 3)
 abline(h = 0, v = 0, col = "grey")
 arrows(x0 = c(0, 0, 0), y0 = c(0, 0, 0), 
        x1 = coef(profit.factor)[1, ]*5, y1 = coef(profit.factor)[2, ]*5, col = 2, lwd = 1)
