@@ -180,6 +180,8 @@ text(expand.grid(1:dim, 1:dim), sprintf("%0.1f", dst), cex=0.6)
 # Close the pdf file
 # dev.off() 
 
+?cmdscale
+
 fit <- cmdscale(dist.df, k = 2) #izdusum
 fit
 
@@ -306,15 +308,15 @@ summary(profit.factor)
 coef(profit.factor)
 str(profit.factor)
 
-#pdf("Factor Analysis_xy.pdf")
+pdf("Factor Analysis_xy.pdf")
 plot(x.factor, y.factor, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
-     pch = ".", ylim = c(-7.5, 7.5), xlim = c(-7.5, 7.5))
+     pch = ".", ylim = c(-5, 5), xlim = c(-5, 5))
 text(x.factor, y.factor, labels = hscores$Group.1, cex = 0.5, pos = 3)
 abline(h = 0, v = 0, col = "grey")
 arrows(x0 = c(0, 0, 0), y0 = c(0, 0, 0), 
        x1 = coef(profit.factor)[1, ]*5, y1 = coef(profit.factor)[2, ]*5, col = 2, lwd = 1)
 text(t(coef(profit.factor)*5), colnames(coef(profit.factor)*5), cex=0.4, col = 2, pos = c(3,2))
-#dev.off()
+dev.off()
 
 # Factor Analysis bitti.
 
