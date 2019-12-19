@@ -400,3 +400,8 @@ total_matrix <- rbind(general_sums,female_sums, male_sums, no_gender_sums ,
            income1_sums, income2_sums, income3_sums, income4_sums, income5_sums, income6_sums, income7_sums, income8_sums)
 colnames(total_matrix) <- head
 total_matrix
+
+
+### ---- Other Descriptive Analytics (Kodlarimiz karismasin diye section actim buraya) ----
+
+#code code
