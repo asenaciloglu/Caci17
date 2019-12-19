@@ -211,8 +211,192 @@ unemployed_sums <- c(sum(unemployed$BrandAwareness_Anker),
                        sum(counts_unemployed == "7"),
                        sum(counts_unemployed == "8"))
 
+#by income
+levels(bluetooth$IncomeLabel)
+#we have 8 levels, 1 to 7 is going in an increasing scale, while 8 is not specified 
+bluetooth$Income <- as.factor(bluetooth$Income)
+income1 <- bluetooth[bluetooth$Income == "1",]
+income2 <- bluetooth[bluetooth$Income == "2",]
+income3 <- bluetooth[bluetooth$Income == "3",]
+income4 <- bluetooth[bluetooth$Income == "4",]
+income5 <- bluetooth[bluetooth$Income == "5",]
+income6 <- bluetooth[bluetooth$Income == "6",]
+income7 <- bluetooth[bluetooth$Income == "7",]
+income8 <- bluetooth[bluetooth$Income == "8",]
 
 
-x <- rbind(general_sums,female_sums, male_sums, no_gender_sums ,employed_sums, retired_sums, selfemployed_sums, student_sums, unemployed_sums)
-colnames(x) <- head
-x
+counts_income1 <- as.vector(rowSums(income1[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
+income1_sums <- c(sum(income1$BrandAwareness_Anker), 
+                     sum(income1$BrandAwareness_Bose),
+                     sum(income1$BrandAwareness_JBL),
+                     sum(income1$BrandAwareness_Philips),
+                     sum(income1$BrandAwareness_Sony),
+                     sum(income1$BrandAwareness_UE),
+                     sum(income1$BrandAwareness_HarmanKardon),
+                     sum(income1$BrandAwareness_Beats),
+                     sum(income1$BrandAwareness_None),
+                     nrow(income1),
+                     sum(counts_income1 == "0"),
+                     sum(counts_income1 == "1"),
+                     sum(counts_income1 == "2"),
+                     sum(counts_income1 == "3"),
+                     sum(counts_income1 == "4"),
+                     sum(counts_income1 == "5"),
+                     sum(counts_income1 == "6"),
+                     sum(counts_income1 == "7"),
+                     sum(counts_income1 == "8"))
+
+counts_income2 <- as.vector(rowSums(income2[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
+income2_sums <- c(sum(income2$BrandAwareness_Anker), 
+                     sum(income2$BrandAwareness_Bose),
+                     sum(income2$BrandAwareness_JBL),
+                     sum(income2$BrandAwareness_Philips),
+                     sum(income2$BrandAwareness_Sony),
+                     sum(income2$BrandAwareness_UE),
+                     sum(income2$BrandAwareness_HarmanKardon),
+                     sum(income2$BrandAwareness_Beats),
+                     sum(income2$BrandAwareness_None),
+                     nrow(income2),
+                     sum(counts_income2 == "0"),
+                     sum(counts_income2 == "1"),
+                     sum(counts_income2 == "2"),
+                     sum(counts_income2 == "3"),
+                     sum(counts_income2 == "4"),
+                     sum(counts_income2 == "5"),
+                     sum(counts_income2 == "6"),
+                     sum(counts_income2 == "7"),
+                     sum(counts_income2 == "8"))
+
+
+counts_income3 <- as.vector(rowSums(income3[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
+income3_sums <- c(sum(income3$BrandAwareness_Anker), 
+                     sum(income3$BrandAwareness_Bose),
+                     sum(income3$BrandAwareness_JBL),
+                     sum(income3$BrandAwareness_Philips),
+                     sum(income3$BrandAwareness_Sony),
+                     sum(income3$BrandAwareness_UE),
+                     sum(income3$BrandAwareness_HarmanKardon),
+                     sum(income3$BrandAwareness_Beats),
+                     sum(income3$BrandAwareness_None),
+                     nrow(income3),
+                     sum(counts_income3 == "0"),
+                     sum(counts_income3 == "1"),
+                     sum(counts_income3 == "2"),
+                     sum(counts_income3 == "3"),
+                     sum(counts_income3 == "4"),
+                     sum(counts_income3 == "5"),
+                     sum(counts_income3 == "6"),
+                     sum(counts_income3 == "7"),
+                     sum(counts_income3 == "8"))
+
+counts_income4 <- as.vector(rowSums(income4[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
+income4_sums <- c(sum(income4$BrandAwareness_Anker), 
+                     sum(income4$BrandAwareness_Bose),
+                     sum(income4$BrandAwareness_JBL),
+                     sum(income4$BrandAwareness_Philips),
+                     sum(income4$BrandAwareness_Sony),
+                     sum(income4$BrandAwareness_UE),
+                     sum(income4$BrandAwareness_HarmanKardon),
+                     sum(income4$BrandAwareness_Beats),
+                     sum(income4$BrandAwareness_None),
+                     nrow(income4),
+                     sum(counts_income4 == "0"),
+                     sum(counts_income4 == "1"),
+                     sum(counts_income4 == "2"),
+                     sum(counts_income4 == "3"),
+                     sum(counts_income4 == "4"),
+                     sum(counts_income4 == "5"),
+                     sum(counts_income4 == "6"),
+                     sum(counts_income4 == "7"),
+                     sum(counts_income4 == "8"))
+
+counts_income5 <- as.vector(rowSums(income5[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
+income5_sums <- c(sum(income5$BrandAwareness_Anker), 
+                     sum(income5$BrandAwareness_Bose),
+                     sum(income5$BrandAwareness_JBL),
+                     sum(income5$BrandAwareness_Philips),
+                     sum(income5$BrandAwareness_Sony),
+                     sum(income5$BrandAwareness_UE),
+                     sum(income5$BrandAwareness_HarmanKardon),
+                     sum(income5$BrandAwareness_Beats),
+                     sum(income5$BrandAwareness_None),
+                     nrow(income5),
+                     sum(counts_income5 == "0"),
+                     sum(counts_income5 == "1"),
+                     sum(counts_income5 == "2"),
+                     sum(counts_income5 == "3"),
+                     sum(counts_income5 == "4"),
+                     sum(counts_income5 == "5"),
+                     sum(counts_income5 == "6"),
+                     sum(counts_income5 == "7"),
+                     sum(counts_income5 == "8"))
+
+counts_income6 <- as.vector(rowSums(income6[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
+income6_sums <- c(sum(income6$BrandAwareness_Anker), 
+                     sum(income6$BrandAwareness_Bose),
+                     sum(income6$BrandAwareness_JBL),
+                     sum(income6$BrandAwareness_Philips),
+                     sum(income6$BrandAwareness_Sony),
+                     sum(income6$BrandAwareness_UE),
+                     sum(income6$BrandAwareness_HarmanKardon),
+                     sum(income6$BrandAwareness_Beats),
+                     sum(income6$BrandAwareness_None),
+                     nrow(income6),
+                     sum(counts_income6 == "0"),
+                     sum(counts_income6 == "1"),
+                     sum(counts_income6 == "2"),
+                     sum(counts_income6 == "3"),
+                     sum(counts_income6 == "4"),
+                     sum(counts_income6 == "5"),
+                     sum(counts_income6 == "6"),
+                     sum(counts_income6 == "7"),
+                     sum(counts_income6 == "8"))
+
+counts_income7 <- as.vector(rowSums(income7[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
+income7_sums <- c(sum(income7$BrandAwareness_Anker), 
+                     sum(income7$BrandAwareness_Bose),
+                     sum(income7$BrandAwareness_JBL),
+                     sum(income7$BrandAwareness_Philips),
+                     sum(income7$BrandAwareness_Sony),
+                     sum(income7$BrandAwareness_UE),
+                     sum(income7$BrandAwareness_HarmanKardon),
+                     sum(income7$BrandAwareness_Beats),
+                     sum(income7$BrandAwareness_None),
+                     nrow(income7),
+                     sum(counts_income7 == "0"),
+                     sum(counts_income7 == "1"),
+                     sum(counts_income7 == "2"),
+                     sum(counts_income7 == "3"),
+                     sum(counts_income7 == "4"),
+                     sum(counts_income7 == "5"),
+                     sum(counts_income7 == "6"),
+                     sum(counts_income7 == "7"),
+                     sum(counts_income7 == "8"))
+
+counts_income8 <- as.vector(rowSums(income8[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
+income8_sums <- c(sum(income8$BrandAwareness_Anker), 
+                     sum(income8$BrandAwareness_Bose),
+                     sum(income8$BrandAwareness_JBL),
+                     sum(income8$BrandAwareness_Philips),
+                     sum(income8$BrandAwareness_Sony),
+                     sum(income8$BrandAwareness_UE),
+                     sum(income8$BrandAwareness_HarmanKardon),
+                     sum(income8$BrandAwareness_Beats),
+                     sum(income8$BrandAwareness_None),
+                     nrow(income8),
+                     sum(counts_income8 == "0"),
+                     sum(counts_income8 == "1"),
+                     sum(counts_income8 == "2"),
+                     sum(counts_income8 == "3"),
+                     sum(counts_income8 == "4"),
+                     sum(counts_income8 == "5"),
+                     sum(counts_income8 == "6"),
+                     sum(counts_income8 == "7"),
+                     sum(counts_income8 == "8"))
+
+
+total_matrix <- rbind(general_sums,female_sums, male_sums, no_gender_sums ,
+           employed_sums, retired_sums, selfemployed_sums, student_sums, unemployed_sums,
+           income1_sums, income2_sums, income3_sums, income4_sums, income5_sums, income6_sums, income7_sums, income8_sums)
+colnames(total_matrix) <- head
+total_matrix
