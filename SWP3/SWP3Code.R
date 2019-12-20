@@ -7,12 +7,12 @@ bluetooth <- read.csv("indivData.csv")
 ###---- Brand Awarenes ----
 
 #bakalim kac kisi biliyormus
-head <- c("Anker", "Bose", "JBL", "Philips", "Sony", "UE", "HarmanKardon", "Beats", "None", "Observations", "0", "1", "2", "3", "4", "5", "6", "7", "8")
+head <- c("Anker", "Bose", "JBL", "Philips", "Sony", "UE", "HarmanKardon", "Beats", "None", "Observations", "0", "1", "2", "3", "4", "5", "6", "7", "8", "Avr")
 
 counts_general <- as.vector(rowSums(bluetooth[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
 #let's make a new column with counts general
 bluetooth$brand_awareness <- as.factor(counts_general)
-plot(bluetooth$brand_awareness, xlab="# Known Brands by Respondent", ylab = "Frequency", ylim=c(0,120), main = "Brand Awareness", col = "rosybrown3", cex.lab=1.5, cex.axis=1.5, cex.main=2, cex.sub=1.5, cex.names = 1.5)
+plot(bluetooth$brand_awareness, xlab="# Known Brands by Respondents", ylab = "Frequency", ylim=c(0,120), main = "Brand Awareness", col = "rosybrown3", cex.lab=1.5, cex.axis=1.5, cex.main=2, cex.sub=1.5, cex.names = 1.5)
 
 general_sums <- c(sum(bluetooth$BrandAwareness_Anker), 
               sum(bluetooth$BrandAwareness_Bose),
@@ -32,7 +32,8 @@ general_sums <- c(sum(bluetooth$BrandAwareness_Anker),
               sum(counts_general == "5"),
               sum(counts_general == "6"),
               sum(counts_general == "7"),
-              sum(counts_general == "8")) #there is one person did not respond this question!
+              sum(counts_general == "8"),
+              mean(counts_general)) #there is one person did not respond this question!
 
 #hicbirini bilmiyorum diyen ama yine de baska markayi biliyorum diye isaretleyen olmus mu- olmamis baktim.
 
@@ -60,7 +61,8 @@ female_sums <- c(sum(female$BrandAwareness_Anker),
                   sum(counts_female == "5"),
                   sum(counts_female == "6"),
                   sum(counts_female == "7"),
-                  sum(counts_female == "8"))
+                  sum(counts_female == "8"),
+                  mean(counts_female))
 
 counts_male <- as.vector(rowSums(male[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
 male_sums <- c(sum(male$BrandAwareness_Anker), 
@@ -81,7 +83,8 @@ male_sums <- c(sum(male$BrandAwareness_Anker),
                   sum(counts_male == "5"),
                   sum(counts_male == "6"),
                   sum(counts_male == "7"),
-                  sum(counts_male == "8"))
+                  sum(counts_male == "8"),
+                  mean(counts_male))
 
 counts_gender <- as.vector(rowSums(no_gender_info[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
 no_gender_sums <- c(sum(no_gender_info$BrandAwareness_Anker), 
@@ -102,7 +105,8 @@ no_gender_sums <- c(sum(no_gender_info$BrandAwareness_Anker),
                   sum(counts_gender == "5"),
                   sum(counts_gender == "6"),
                   sum(counts_gender == "7"),
-                  sum(counts_gender == "8"))
+                  sum(counts_gender == "8"),
+                  mean(counts_gender))
 #by their occupation
 employed <- bluetooth[bluetooth$OccupationLabel == "Employed",]
 retired <- bluetooth[bluetooth$OccupationLabel == "Retired",]
@@ -129,7 +133,8 @@ employed_sums <- c(sum(employed$BrandAwareness_Anker),
                  sum(counts_employed == "5"),
                  sum(counts_employed == "6"),
                  sum(counts_employed == "7"),
-                 sum(counts_employed == "8"))
+                 sum(counts_employed == "8"),
+                 mean(counts_employed))
 
 counts_retired <- as.vector(rowSums(retired[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
 retired_sums <- c(sum(retired$BrandAwareness_Anker), 
@@ -150,7 +155,8 @@ retired_sums <- c(sum(retired$BrandAwareness_Anker),
                sum(counts_retired == "5"),
                sum(counts_retired == "6"),
                sum(counts_retired == "7"),
-               sum(counts_retired == "8"))
+               sum(counts_retired == "8"),
+               mean(counts_retired))
 
 counts_selfemployed <- as.vector(rowSums(selfemployed[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
 selfemployed_sums <- c(sum(selfemployed$BrandAwareness_Anker), 
@@ -171,7 +177,8 @@ selfemployed_sums <- c(sum(selfemployed$BrandAwareness_Anker),
                     sum(counts_selfemployed == "5"),
                     sum(counts_selfemployed == "6"),
                     sum(counts_selfemployed == "7"),
-                    sum(counts_selfemployed == "8"))
+                    sum(counts_selfemployed == "8"),
+                    mean(counts_selfemployed))
 
 counts_student <- as.vector(rowSums(student[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
 student_sums <- c(sum(student$BrandAwareness_Anker), 
@@ -192,7 +199,8 @@ student_sums <- c(sum(student$BrandAwareness_Anker),
                       sum(counts_student == "5"),
                       sum(counts_student == "6"),
                       sum(counts_student == "7"),
-                      sum(counts_student == "8"))
+                      sum(counts_student == "8"),
+                      mean(counts_student))
 
 counts_unemployed <- as.vector(rowSums(unemployed[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
 unemployed_sums <- c(sum(unemployed$BrandAwareness_Anker), 
@@ -213,7 +221,8 @@ unemployed_sums <- c(sum(unemployed$BrandAwareness_Anker),
                        sum(counts_unemployed == "5"),
                        sum(counts_unemployed == "6"),
                        sum(counts_unemployed == "7"),
-                       sum(counts_unemployed == "8"))
+                       sum(counts_unemployed == "8"),
+                       mean(counts_unemployed))
 
 #by income
 levels(bluetooth$IncomeLabel)
@@ -248,7 +257,8 @@ income1_sums <- c(sum(income1$BrandAwareness_Anker),
                      sum(counts_income1 == "5"),
                      sum(counts_income1 == "6"),
                      sum(counts_income1 == "7"),
-                     sum(counts_income1 == "8"))
+                     sum(counts_income1 == "8"),
+                     mean(counts_income1))
 
 counts_income2 <- as.vector(rowSums(income2[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
 income2_sums <- c(sum(income2$BrandAwareness_Anker), 
@@ -269,7 +279,8 @@ income2_sums <- c(sum(income2$BrandAwareness_Anker),
                      sum(counts_income2 == "5"),
                      sum(counts_income2 == "6"),
                      sum(counts_income2 == "7"),
-                     sum(counts_income2 == "8"))
+                     sum(counts_income2 == "8"),
+                     mean(counts_income2))
 
 
 counts_income3 <- as.vector(rowSums(income3[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
@@ -291,7 +302,8 @@ income3_sums <- c(sum(income3$BrandAwareness_Anker),
                      sum(counts_income3 == "5"),
                      sum(counts_income3 == "6"),
                      sum(counts_income3 == "7"),
-                     sum(counts_income3 == "8"))
+                     sum(counts_income3 == "8"),
+                     mean(counts_income3))
 
 counts_income4 <- as.vector(rowSums(income4[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
 income4_sums <- c(sum(income4$BrandAwareness_Anker), 
@@ -312,7 +324,8 @@ income4_sums <- c(sum(income4$BrandAwareness_Anker),
                      sum(counts_income4 == "5"),
                      sum(counts_income4 == "6"),
                      sum(counts_income4 == "7"),
-                     sum(counts_income4 == "8"))
+                     sum(counts_income4 == "8"),
+                     mean(counts_income4))
 
 counts_income5 <- as.vector(rowSums(income5[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
 income5_sums <- c(sum(income5$BrandAwareness_Anker), 
@@ -333,7 +346,8 @@ income5_sums <- c(sum(income5$BrandAwareness_Anker),
                      sum(counts_income5 == "5"),
                      sum(counts_income5 == "6"),
                      sum(counts_income5 == "7"),
-                     sum(counts_income5 == "8"))
+                     sum(counts_income5 == "8"),
+                     mean(counts_income5))
 
 counts_income6 <- as.vector(rowSums(income6[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
 income6_sums <- c(sum(income6$BrandAwareness_Anker), 
@@ -354,7 +368,8 @@ income6_sums <- c(sum(income6$BrandAwareness_Anker),
                      sum(counts_income6 == "5"),
                      sum(counts_income6 == "6"),
                      sum(counts_income6 == "7"),
-                     sum(counts_income6 == "8"))
+                     sum(counts_income6 == "8"),
+                     mean(counts_income6))
 
 counts_income7 <- as.vector(rowSums(income7[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
 income7_sums <- c(sum(income7$BrandAwareness_Anker), 
@@ -375,7 +390,8 @@ income7_sums <- c(sum(income7$BrandAwareness_Anker),
                      sum(counts_income7 == "5"),
                      sum(counts_income7 == "6"),
                      sum(counts_income7 == "7"),
-                     sum(counts_income7 == "8"))
+                     sum(counts_income7 == "8"),
+                     mean(counts_income7))
 
 counts_income8 <- as.vector(rowSums(income8[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
 income8_sums <- c(sum(income8$BrandAwareness_Anker), 
@@ -396,8 +412,8 @@ income8_sums <- c(sum(income8$BrandAwareness_Anker),
                      sum(counts_income8 == "5"),
                      sum(counts_income8 == "6"),
                      sum(counts_income8 == "7"),
-                     sum(counts_income8 == "8"))
-
+                     sum(counts_income8 == "8"),
+                     mean(counts_income8))
 
 total_matrix <- rbind(general_sums,female_sums, male_sums, no_gender_sums ,
            employed_sums, retired_sums, selfemployed_sums, student_sums, unemployed_sums,
@@ -405,6 +421,7 @@ total_matrix <- rbind(general_sums,female_sums, male_sums, no_gender_sums ,
 colnames(total_matrix) <- head
 total_matrix
 
+#write.csv(total_matrix, "file.csv")
 
 ### ---- Other Descriptive Analytics (Kodlarimiz karismasin diye section actim buraya) ----
 
