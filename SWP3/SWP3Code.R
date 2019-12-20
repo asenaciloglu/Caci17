@@ -10,6 +10,13 @@ bluetooth <- read.csv("indivData.csv")
 head <- c("Anker", "Bose", "JBL", "Philips", "Sony", "UE", "HarmanKardon", "Beats", "None", "Observations", "0", "1", "2", "3", "4", "5", "6", "7", "8")
 
 counts_general <- as.vector(rowSums(bluetooth[, c(4, 5, 6, 7, 8, 9, 10, 11)]))
+#let's make a new column with counts general
+bluetooth$brand_awareness <- as.factor(counts_general)
+table_results  <- as.vectotable(bluetooth$brand_awareness)
+numbers <- c("0", "1", "2", "3", "4", "5", "6", "7", "8")
+numbers <- as.numeric(numbers)
+plot <- hist(numbers, table(bluetooth$brand_awareness))
+plot + coord_flip()
 general_sums <- c(sum(bluetooth$BrandAwareness_Anker), 
               sum(bluetooth$BrandAwareness_Bose),
               sum(bluetooth$BrandAwareness_JBL),
