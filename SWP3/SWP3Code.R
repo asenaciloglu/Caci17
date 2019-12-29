@@ -423,6 +423,45 @@ total_matrix
 
 #write.csv(total_matrix, "file.csv")
 
+
+### RELATIVE IMPORTANT FACTORS ANALYSIS - 0rki
+
+# genel data da insanlar neyi onemsemis, en fazla degerler vs....
+relImportanceEveryone <- cbind(summary(bluetooth$RelImp_battery), summary(bluetooth$RelImp_price),
+                       summary(bluetooth$RelImp_weight), summary(bluetooth$RelImp_sound) )
+colnames(relImportance) <- (cbind('Battery', 'Price', 'Weight', 'Sound'))
+# sonra bu aynisini farkli yas-income-bilgi vs. gruplari icin yapilsin.
+
+mean(x = sort(x = bluetooth$RelImp_weight)[-c(1, length(x = bluetooth$RelImp_weight))])
+
+# TO-DO: otomatize edilebilir regex kullanilarak, kafam basmadi suan
+# for (attribute in regexpr('RelImp_*', colnames(bluetooth))) {
+#   hist(bluetooth$attribute, freq = FALSE)
+#   lines(density(bluetooth$attribute))
+# }
+
+# Open a png file
+png("RelativeImportanceDists.png")
+
+par(mfrow=c(2, 2)) # aslinda 2ye 2lik bir grafik template i aciyor
+
+hist(bluetooth$RelImp_battery, freq = FALSE, main = 'Battery' , xlab = 'Relative Importance')
+lines(density(bluetooth$RelImp_battery))
+
+hist(bluetooth$RelImp_price, freq = FALSE, main = 'Price', xlab = 'Relative Importance')
+lines(density(bluetooth$RelImp_price))
+
+hist(bluetooth$RelImp_weight, freq = FALSE, main = 'Weight', xlab = 'Relative Importance')
+lines(density(bluetooth$RelImp_weight))
+
+hist(bluetooth$RelImp_sound, freq = FALSE, main = 'Sound', xlab = 'Relative Importance')
+lines(density(bluetooth$RelImp_sound))
+
+mtext('Distribution of Relative Importances', outer = TRUE, cex = 1.5)
+
+# Close the png file
+dev.off() 
+
 ### ---- Other Descriptive Analytics (Kodlarimiz karismasin diye section actim buraya) ----
 
 #code code
