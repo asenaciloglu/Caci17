@@ -3,7 +3,6 @@ setwd("~/Caci17/SWP3")
 
 bluetooth <- read.csv("indivData.csv")
 
-
 ###---- Brand Awarenes ----
 
 #bakalim kac kisi biliyormus
@@ -461,6 +460,88 @@ mtext('Distribution of Relative Importances', outer = TRUE, cex = 1.5)
 
 # Close the png file
 dev.off() 
+
+
+
+
+
+### Knowledge about Speakers
+
+library(psych)
+library(dplyr)
+#1: I know pretty much
+#2: not very knowledgeable
+#3: expert (among the circle of friends)
+#4: I know less (compared to most other people)
+#5: I really don???t know
+
+data_subjknow <- bluetooth %>%
+  select(starts_with("SubjKnow"))
+
+## PCA
+pca_2factor<-principal(data_subjknow, nfactors=2, rotate ="varimax")
+pca_2factor
+# 1, 2, 4 ve 5 factor oldu, 3 ayri kaldi.
+
+pca_3factor<-principal(data_subjknow, nfactors=3, rotate ="varimax")
+pca_3factor
+# 1, 2 ve 5 factor oldu, 3 ayri bir factor, 4 ayri bir factor oldu.
+
+head(pca_2factor$scores)
+t(pca_2factor$scores)%*%pca_2factor$scores/(nrow(data_subjknow)-1) # show that factors are uncorrelated
+
+
+scores <- aggregate(pca_2factor$scores, by=list(bluetooth$IntentToBuy), mean, na.rm=TRUE)
+x <- scores[,2]
+y <- scores[,3]
+plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
+     pch = 19, ylim = c(-2, 2), xlim = c(-2, 2))
+text(x, y, labels = scores[,1], cex = 1, pos = 4)
+abline(h = 0, v = 0, col = "grey")
+
+
+head(pca_3factor$scores)
+t(pca_3factor$scores)%*%pca_3factor$scores/(nrow(data_subjknow)-1) # show that factors are uncorrelated
+
+
+
+### Is it important?
+
+#1: important
+#2: mean nothing
+#3: matter
+#4: significant
+#5: no concern
+
+data_PII <- bluetooth %>%
+  select(starts_with("PII"))
+
+## PCA
+pca_2factor<-principal(data_PII, nfactors=2, rotate ="varimax")
+pca_2factor
+# 1, 2, 3 ve 4 factor oldu, 5 ayri kaldi.
+
+head(pca_2factor$scores)
+t(pca_2factor$scores)%*%pca_2factor$scores/(nrow(data_subjknow)-1) # show that factors are uncorrelated
+
+scores <- aggregate(pca_2factor$scores, by=list(bluetooth$IntentToBuy), mean, na.rm=TRUE)
+x <- scores[,2]
+y <- scores[,3]
+plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
+     pch = 19, ylim = c(-2, 2), xlim = c(-2, 2))
+text(x, y, labels = scores[,1], cex = 1, pos = 4)
+abline(h = 0, v = 0, col = "grey")
+
+
+pca_3factor<-principal(data_PII, nfactors=3, rotate ="varimax")
+pca_3factor
+# 1, 3 ve 4 factor oldu, 2 ayri bir factor, 5 ayri bir factor oldu.
+
+head(pca_3factor$scores)
+t(pca_3factor$scores)%*%pca_3factor$scores/(nrow(data_subjknow)-1) # show that factors are uncorrelated
+
+
+
 
 ### ---- Other Descriptive Analytics (Kodlarimiz karismasin diye section actim buraya) ----
 
