@@ -468,7 +468,7 @@ dev.off()
 
 
 
-#######     KNOWLEDGE ABOUT SPEAKERS
+#######              KNOWLEDGE ABOUT SPEAKERS
 
 #1: I know pretty much
 #2: not very knowledgeable
@@ -503,28 +503,96 @@ scores
 data_relimp <- bluetooth %>%
   select(starts_with("RelImp"))
 
-bluetooth$RelImp_label <- colnames(data_relimp)[apply(data_relimp,1,which.max)]
-# RelImp_battery : 1
-# RelImp_weight : 2
-# RelImp_price : 3
-# RelImp_sound : 4
-
-bluetooth$RelImp[bluetooth$RelImp_label == "RelImp_battery"] <- 1
-bluetooth$RelImp[bluetooth$RelImp_label == "RelImp_weight"] <- 2
-bluetooth$RelImp[bluetooth$RelImp_label == "RelImp_price"] <- 3
-bluetooth$RelImp[bluetooth$RelImp_label == "RelImp_sound"] <- 4
+bluetooth$RelImp <- colnames(data_relimp)[apply(data_relimp,1,which.max)]
 
 scores<-aggregate(fa$scores, by=list(bluetooth$RelImp),mean, na.rm=TRUE)
 scores
+scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
+scores_sorted
 
 # burda en buyuk deger buyukten kucuge : sound , battery , price , weight ( 0.17 , -0.018 , -0.148 , -0.69)
 # yani en cok bilenler, relative importance larini ustteki siraya gore belirlemisler.
 
+###     Gender'a gore : 
+# Cok bilenlerin cinsiyeti ne? 
+
+scores<-aggregate(fa$scores, by=list(bluetooth$GenderLabel),mean, na.rm=TRUE)
+scores
+scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
+scores_sorted
+
+# burda en buyuk deger buyukten kucuge : male, no answer, female ( 0.35 , -0.119, -0.44)
+# yani en cok bilenlerin sirasi yukaridaki gibi.
+
+
+###     Age'e gore : 
+# Cok bilenlerin yasi ne? 
+
+levels(bluetooth$AgeLabel)
+# 8 level var, "1": <18 ve "8": >=50
+scores<-aggregate(fa$scores, by=list(bluetooth$AgeLabel),mean, na.rm=TRUE)
+scores
+scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
+scores_sorted
+
+# karisik biraz 25-40 arasi daha cok biliyor, bi de 18 yas alti
+
+###     Residence'a gore : 
+# Cok bilenler nerde yasiyor? 
+
+levels(bluetooth$Residence)
+# 38 level var.
+scores<-aggregate(fa$scores, by=list(bluetooth$Residence),mean, na.rm=TRUE)
+scores
+scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
+scores_sorted
+
+# en cok bilen uclu: Macedonia, Iran, Spain
+# en az bilen uclu: Portugal, Serbia, Ukraine
+
+
+###     Occupation'a gore : 
+# Cok bilenler nerde yasiyor? 
+
+levels(bluetooth$OccupationLabel)
+# 5 level var.
+scores<-aggregate(fa$scores, by=list(bluetooth$OccupationLabel),mean, na.rm=TRUE)
+scores
+scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
+scores_sorted
+
+# Cok bilenden az bilene : student, self-employed, employed, unemployed, retired
+
+
+###     Education'a gore : 
+# Cok bilenler ne kadar egitimli? 
+
+levels(bluetooth$EducationLabel)
+# 5 level var.
+scores<-aggregate(fa$scores, by=list(bluetooth$EducationLabel),mean, na.rm=TRUE)
+scores
+scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
+scores_sorted
+
+# Cok bilenden az bilene : undergraduate, graduate, high school, other, less than high school
+
+
+###     Income'a gore : 
+# Cok bilenler ne kadar parasi var? 
+
+levels(bluetooth$IncomeLabel)
+# 8 level var.
+scores<-aggregate(fa$scores, by=list(bluetooth$IncomeLabel),mean, na.rm=TRUE)
+scores
+scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
+scores_sorted
+
+# Cok bilenden az bilene : zenginler daha cok biliyor genelde :)
 
 
 
 
-####        IS IT IMPORTANT?
+####                  IS IT IMPORTANT?
 
 #1: important
 #2: mean nothing
@@ -566,8 +634,84 @@ scores
 # burda en buyuk deger buyukten kucuge : sound , battery , price , weight ( 0.202 , -0.079 , -0.19 , -0.41)
 # yani en cok onem verenler, relative importance larini ustteki siraya gore belirlemisler.
 
+###     Gender'a gore : 
+# Cok bilenlerin cinsiyeti ne? 
+
+scores<-aggregate(fa$scores, by=list(bluetooth$GenderLabel),mean, na.rm=TRUE)
+scores
+scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
+scores_sorted
+
+# burda en buyuk deger buyukten kucuge : male, no answer, female ( 0.35 , -0.119, -0.44)
+# yani en cok bilenlerin sirasi yukaridaki gibi.
 
 
+###     Age'e gore : 
+# Cok onem verenlerin yasi ne? 
+
+levels(bluetooth$AgeLabel)
+# 8 level var, "1": <18 ve "8": >=50
+scores<-aggregate(fa$scores, by=list(bluetooth$AgeLabel),mean, na.rm=TRUE)
+scores
+scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
+scores_sorted
+
+# onem verenler 18 yas alti ve 18-29, 
+# cok bilenlerle karsilastirinca biraz komik, cok bilenler 25-40 arasi genelde :) 
+
+
+
+###     Residence'a gore : 
+# Cok onem verenler nerde yasiyor? 
+
+levels(bluetooth$Residence)
+# 38 level var.
+scores<-aggregate(fa$scores, by=list(bluetooth$Residence),mean, na.rm=TRUE)
+scores
+scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
+scores_sorted
+
+# en cok onem veren uclu: Macedonia, Brazil, Spain
+# en az onem veren uclu: Syria, Benin, China
+
+
+###     Occupation'a gore : 
+# Cok onem verenler nap??yor? :)
+
+levels(bluetooth$OccupationLabel)
+# 5 level var.
+scores<-aggregate(fa$scores, by=list(bluetooth$OccupationLabel),mean, na.rm=TRUE)
+scores
+scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
+scores_sorted
+
+# Cok bilenden az bilene : student, self-employed, employed, unemployed, retired
+
+
+###     Education'a gore : 
+# Cok onem verenler ne kadar egitimli? 
+
+levels(bluetooth$EducationLabel)
+# 5 level var.
+scores<-aggregate(fa$scores, by=list(bluetooth$EducationLabel),mean, na.rm=TRUE)
+scores
+scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
+scores_sorted
+
+# Cok bilenden az bilene : other, undergraduate, high school, graduate, less than high school
+
+
+###     Income'a gore : 
+# Cok onem verenlerin ne kadar parasi var? 
+
+levels(bluetooth$IncomeLabel)
+# 8 level var.
+scores<-aggregate(fa$scores, by=list(bluetooth$IncomeLabel),mean, na.rm=TRUE)
+scores
+scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
+scores_sorted
+
+# Cok onem verenden az verene : karisik biraz, middle income? :)
 
 
 ### ---- Other Descriptive Analytics (Kodlarimiz karismasin diye section actim buraya) ----
@@ -645,6 +789,45 @@ scores
 
 #head(pca_3factor$scores)
 #t(pca_3factor$scores)%*%pca_3factor$scores/(nrow(data_subjknow)-1) # show that factors are uncorrelated
+
+############################################################################################
+#####      KNOWLEGDE VE IMPORTANCE FACTORLERI COK YAK??N SONUC VERIYOR, BEN HEPSINI KOMPLE MI FACTORLESEM? HE HE :)
+
+data_factor <- bluetooth %>%
+  select(starts_with("SubjKnow"),
+         starts_with("PII"))
+
+# Eigenvalue -- finding the optimal number of factors
+eigen(cor(data_factor))$values
+plot(eigen(cor(data_factor))$values) # 2 tane factor yap diyor, ilk eigenvalue: 4,95, ikinci: 2,206
+fa<-fa(data_factor,method=mle,scores='tenBerge',
+       nfactors=2, rotate ="varimax")
+fa # knowledgelari ayr?? factorledi, importancelari ayri factorledi, mantikli.
+
+###      IntentToBuy'a gore : 
+# Cok onem verenler + bilenler almaya daha mi meyilli?
+scores<-aggregate(fa$scores, by=list(bluetooth$IntentToBuy),mean, na.rm=TRUE)
+scores
+
+# scores: IntentToBuy = 0 icin -0.137 ve -0.519 , IntentToBuy = 1 icin 0.274 ve 0.103, 
+# cok onem verenler + bilenler almaya daha meyilli.
+
+
+###       Relative Importance'a gore : 
+# Cok onem verenler + bilenler neye onem veriyor?
+
+scores<-aggregate(fa$scores, by=list(bluetooth$RelImp),mean, na.rm=TRUE)
+scores
+
+# RelImp_battery : 1
+# RelImp_weight : 2
+# RelImp_price : 3
+# RelImp_sound : 4
+
+# burda en buyuk deger buyukten kucuge : sound , battery , price , weight
+# yani en cok onem verenler + bilenler, relative importance larini ustteki siraya gore belirlemisler.
+
+############################################################################################
 
 
 ###########
