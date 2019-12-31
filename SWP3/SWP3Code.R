@@ -1,6 +1,9 @@
 getwd()
 setwd("~/Caci17/SWP3")
 
+library(psych)
+library(dplyr)
+
 bluetooth <- read.csv("indivData.csv")
 
 ###---- Brand Awarenes ----
@@ -465,10 +468,8 @@ dev.off()
 
 
 
-### Knowledge about Speakers
+#######     KNOWLEDGE ABOUT SPEAKERS
 
-library(psych)
-library(dplyr)
 #1: I know pretty much
 #2: not very knowledgeable
 #3: expert (among the circle of friends)
@@ -478,34 +479,52 @@ library(dplyr)
 data_subjknow <- bluetooth %>%
   select(starts_with("SubjKnow"))
 
-## PCA
-pca_2factor<-principal(data_subjknow, nfactors=2, rotate ="varimax")
-pca_2factor
-# 1, 2, 4 ve 5 factor oldu, 3 ayri kaldi.
-
-pca_3factor<-principal(data_subjknow, nfactors=3, rotate ="varimax")
-pca_3factor
-# 1, 2 ve 5 factor oldu, 3 ayri bir factor, 4 ayri bir factor oldu.
-
-head(pca_2factor$scores)
-t(pca_2factor$scores)%*%pca_2factor$scores/(nrow(data_subjknow)-1) # show that factors are uncorrelated
+####      FACTOR ANALYSIS
+# Eigenvalue -- finding the optimal number of factors
+eigen(cor(data_subjknow))$values
+plot(eigen(cor(data_subjknow))$values) # 1 tane factor yap diyor, ilk eigenvalue: 3,47, ikinci: 0.56
+fa<-fa(data_subjknow,method=mle,scores='tenBerge',
+       nfactors=1, rotate ="varimax")
+fa
 
 
-scores <- aggregate(pca_2factor$scores, by=list(bluetooth$IntentToBuy), mean, na.rm=TRUE)
-x <- scores[,2]
-y <- scores[,3]
-plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
-     pch = 19, ylim = c(-2, 2), xlim = c(-2, 2))
-text(x, y, labels = scores[,1], cex = 1, pos = 4)
-abline(h = 0, v = 0, col = "grey")
+###      IntentToBuy'a gore : 
+# Cok bilenler almaya daha mi meyilli?
+scores<-aggregate(fa$scores, by=list(bluetooth$IntentToBuy),mean, na.rm=TRUE)
+scores
+
+# scores: IntentToBuy = 0 icin -0.075 , IntentToBuy = 1 icin 0.150, 
+# bu cok bilenler almaya daha meyilli, such finding!! 
 
 
-head(pca_3factor$scores)
-t(pca_3factor$scores)%*%pca_3factor$scores/(nrow(data_subjknow)-1) # show that factors are uncorrelated
+###     Relative Importance'a gore : 
+# Cok bilenler neye onem veriyor?
+
+data_relimp <- bluetooth %>%
+  select(starts_with("RelImp"))
+
+bluetooth$RelImp_label <- colnames(data_relimp)[apply(data_relimp,1,which.max)]
+# RelImp_battery : 1
+# RelImp_weight : 2
+# RelImp_price : 3
+# RelImp_sound : 4
+
+bluetooth$RelImp[bluetooth$RelImp_label == "RelImp_battery"] <- 1
+bluetooth$RelImp[bluetooth$RelImp_label == "RelImp_weight"] <- 2
+bluetooth$RelImp[bluetooth$RelImp_label == "RelImp_price"] <- 3
+bluetooth$RelImp[bluetooth$RelImp_label == "RelImp_sound"] <- 4
+
+scores<-aggregate(fa$scores, by=list(bluetooth$RelImp),mean, na.rm=TRUE)
+scores
+
+# burda en buyuk deger buyukten kucuge : sound , battery , price , weight ( 0.17 , -0.018 , -0.148 , -0.69)
+# yani en cok bilenler, relative importance larini ustteki siraya gore belirlemisler.
 
 
 
-### Is it important?
+
+
+####        IS IT IMPORTANT?
 
 #1: important
 #2: mean nothing
@@ -516,29 +535,37 @@ t(pca_3factor$scores)%*%pca_3factor$scores/(nrow(data_subjknow)-1) # show that f
 data_PII <- bluetooth %>%
   select(starts_with("PII"))
 
-## PCA
-pca_2factor<-principal(data_PII, nfactors=2, rotate ="varimax")
-pca_2factor
-# 1, 2, 3 ve 4 factor oldu, 5 ayri kaldi.
+####       FACTOR ANALYSIS
+# Eigenvalue -- finding the optimal number of factors
+eigen(cor(data_PII))$values
+plot(eigen(cor(data_PII))$values) # 1 tane factor yap diyor, ilk eigenvalue: 3,47, ikinci: 0.56
+fa<-fa(data_PII,method=mle,scores='tenBerge',
+       nfactors=1, rotate ="varimax")
+fa
 
-head(pca_2factor$scores)
-t(pca_2factor$scores)%*%pca_2factor$scores/(nrow(data_subjknow)-1) # show that factors are uncorrelated
+###      IntentToBuy'a gore : 
+# Cok onem verenler almaya daha mi meyilli?
+scores<-aggregate(fa$scores, by=list(bluetooth$IntentToBuy),mean, na.rm=TRUE)
+scores
 
-scores <- aggregate(pca_2factor$scores, by=list(bluetooth$IntentToBuy), mean, na.rm=TRUE)
-x <- scores[,2]
-y <- scores[,3]
-plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
-     pch = 19, ylim = c(-2, 2), xlim = c(-2, 2))
-text(x, y, labels = scores[,1], cex = 1, pos = 4)
-abline(h = 0, v = 0, col = "grey")
+# scores: IntentToBuy = 0 icin -0.139 , IntentToBuy = 1 icin 0.278, 
+# bu cok bilenler almaya daha meyilli.
 
 
-pca_3factor<-principal(data_PII, nfactors=3, rotate ="varimax")
-pca_3factor
-# 1, 3 ve 4 factor oldu, 2 ayri bir factor, 5 ayri bir factor oldu.
+###       Relative Importance'a gore : 
+# Cok onem verenler neye onem veriyor?
 
-head(pca_3factor$scores)
-t(pca_3factor$scores)%*%pca_3factor$scores/(nrow(data_subjknow)-1) # show that factors are uncorrelated
+scores<-aggregate(fa$scores, by=list(bluetooth$RelImp),mean, na.rm=TRUE)
+scores
+
+# RelImp_battery : 1
+# RelImp_weight : 2
+# RelImp_price : 3
+# RelImp_sound : 4
+
+# burda en buyuk deger buyukten kucuge : sound , battery , price , weight ( 0.202 , -0.079 , -0.19 , -0.41)
+# yani en cok onem verenler, relative importance larini ustteki siraya gore belirlemisler.
+
 
 
 
@@ -546,3 +573,79 @@ t(pca_3factor$scores)%*%pca_3factor$scores/(nrow(data_subjknow)-1) # show that f
 ### ---- Other Descriptive Analytics (Kodlarimiz karismasin diye section actim buraya) ----
 
 #code code
+
+
+####### EDA - pca de yaptim factor analysis yaninda, bence kullanmicaz ama silmiyim dedim.
+## PCA - two factors 
+#pca_2factor<-principal(data_subjknow, nfactors=2, rotate ="varimax")
+#pca_2factor
+# 1, 2, 4 ve 5 factor oldu, 3 ayri kaldi.
+
+#head(pca_2factor$scores)
+#t(pca_2factor$scores)%*%pca_2factor$scores/(nrow(data_subjknow)-1) # show that factors are uncorrelated
+
+# PCA - two factors - plot 
+# burda IntentToBuy'a bak??nca, ??ok bilenler almaya daha meyilli gibi bi ??ey cikarmaya calisiyorum.
+#scores <- aggregate(pca_2factor$scores, by=list(bluetooth$IntentToBuy), mean, na.rm=TRUE)
+#x <- scores[,2]
+#y <- scores[,3]
+#plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
+# pch = 19, ylim = c(-2, 2), xlim = c(-2, 2))
+#text(x, y, labels = scores[,1], cex = 1, pos = 4)
+#abline(h = 0, v = 0, col = "grey")
+
+## PCA - three factors 
+#pca_3factor<-principal(data_subjknow, nfactors=3, rotate ="varimax")
+#pca_3factor
+# 1, 2 ve 5 factor oldu, 3 ayri bir factor, 4 ayri bir factor oldu.
+#3
+#head(pca_3factor$scores)
+#t(pca_3factor$scores)%*%pca_3factor$scores/(nrow(data_subjknow)-1) # show that factors are uncorrelated
+
+#scores<-aggregate(pca_3factor$scores, by=list(bluetooth$IntentToBuy),mean, na.rm=TRUE)
+#scores
+
+#dist.factor <- dist(scores[,-c(1)])
+#dist.factor
+
+###### ERROR SHOW ########
+#fit.factor <- cmdscale(dist.factor, k = 2) # burda error veriyor, 3 factor'un 2 boyutlu izdusumunu cikaramiyorum.
+# variable say??s?? 2, az diye mi oyle oluyor?
+#fit.factor
+
+#x.factor <- fit.factor[,1]
+#y.factor <- fit.factor[,2]
+
+#plot(x.factor, y.factor, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
+#    pch = 19, ylim = c(-3, 3), xlim = c(-3, 3))
+#text(x.factor, y.factor, labels = hscores[,1], cex = 1, pos = 4)
+#abline(h = 0, v = 0, col = "grey")
+
+
+## PCA
+#pca_2factor<-principal(data_PII, nfactors=2, rotate ="varimax")
+#pca_2factor
+# 1, 2, 3 ve 4 factor oldu, 5 ayri kaldi.
+
+#head(pca_2factor$scores)
+#t(pca_2factor$scores)%*%pca_2factor$scores/(nrow(data_subjknow)-1) # show that factors are uncorrelated
+
+#scores <- aggregate(pca_2factor$scores, by=list(bluetooth$IntentToBuy), mean, na.rm=TRUE)
+#x <- scores[,2]
+#y <- scores[,3]
+#plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
+#     pch = 19, ylim = c(-2, 2), xlim = c(-2, 2))
+#text(x, y, labels = scores[,1], cex = 1, pos = 4)
+#abline(h = 0, v = 0, col = "grey")
+
+
+#pca_3factor<-principal(data_PII, nfactors=3, rotate ="varimax")
+#pca_3factor
+# 1, 3 ve 4 factor oldu, 2 ayri bir factor, 5 ayri bir factor oldu.
+
+#head(pca_3factor$scores)
+#t(pca_3factor$scores)%*%pca_3factor$scores/(nrow(data_subjknow)-1) # show that factors are uncorrelated
+
+
+###########
+
