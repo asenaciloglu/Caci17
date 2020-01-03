@@ -482,16 +482,20 @@ png("RelativeImportanceDists.png")
 par(mfrow=c(2, 2)) # aslinda 2ye 2lik bir grafik template i aciyor
 
 hist(bluetooth$RelImp_battery, freq = FALSE, main = 'Battery' , xlab = 'Relative Importance')
-lines(density(bluetooth$RelImp_battery))
+lines(density(bluetooth$RelImp_battery, adjust=2),
+      col="darkgreen", lwd=2, lty= "dotted" )
 
 hist(bluetooth$RelImp_price, freq = FALSE, main = 'Price', xlab = 'Relative Importance')
-lines(density(bluetooth$RelImp_price))
+lines(density(bluetooth$RelImp_price, adjust=2),
+      col="darkgreen", lwd=2, lty= "dotted" )
 
 hist(bluetooth$RelImp_weight, freq = FALSE, main = 'Weight', xlab = 'Relative Importance')
-lines(density(bluetooth$RelImp_weight))
+lines(density(bluetooth$RelImp_weight, adjust=2),
+      col="darkgreen", lwd=2, lty= "dotted" )
 
 hist(bluetooth$RelImp_sound, freq = FALSE, main = 'Sound', xlab = 'Relative Importance')
-lines(density(bluetooth$RelImp_sound))
+lines(density(bluetooth$RelImp_sound, adjust=2),
+      col="darkgreen", lwd=2, lty= "dotted" )
 
 mtext('Distribution of Relative Importances', outer = TRUE, cex = 1.5)
 
