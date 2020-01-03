@@ -426,15 +426,49 @@ total_matrix
 #write.csv(total_matrix, "file.csv")
 
 
-### RELATIVE IMPORTANT FACTORS ANALYSIS - 0rki
+### RELATIVE IMPORTANT FACTORS ANALYSIS - 0rki ORKUN
 
 # genel data da insanlar neyi onemsemis, en fazla degerler vs....
 relImportanceEveryone <- cbind(summary(bluetooth$RelImp_battery), summary(bluetooth$RelImp_price),
                        summary(bluetooth$RelImp_weight), summary(bluetooth$RelImp_sound) )
 colnames(relImportance) <- (cbind('Battery', 'Price', 'Weight', 'Sound'))
-# sonra bu aynisini farkli yas-income-bilgi vs. gruplari icin yapilsin.
 
 mean(x = sort(x = bluetooth$RelImp_weight)[-c(1, length(x = bluetooth$RelImp_weight))])
+
+# sonra bu aynisini farkli yas-income-bilgi vs. gruplari icin yapilsin.
+
+# relImportancePriceGroupedbyBrandAwareness <- bluetooth %>% group_by(BrandAwareness_Anker, BrandAwareness_Bose,
+#                                                       BrandAwareness_JBL, BrandAwareness_Philips,
+#                                                       BrandAwareness_Sony, BrandAwareness_UE,
+#                                                       BrandAwareness_HarmanKardon, BrandAwareness_Beats,
+# BrandAwareness_Beats, BrandAwareness_None) %>% summarise('Price Mean' = mean(RelImp_price))
+# brand awareness a gore grouplamak cok anlamli bi sey cikarmiyo...
+
+relImportancePrice_groupedbyAge <- bluetooth %>% group_by(Age) %>% summarise('Price Mean' = mean(RelImp_price))
+relImportanceSound_groupedbyAge <- bluetooth %>% group_by(Age) %>% summarise('Sound Mean' = mean(RelImp_sound))
+relImportanceBattery_groupedbyAge <- bluetooth %>% group_by(Age) %>% summarise('Battery Mean' = mean(RelImp_battery))
+relImportanceSound_groupedbyAge <- bluetooth %>% group_by(Age) %>% summarise('Weight Mean' = mean(RelImp_weight))
+
+# RelImportance_groupedbyAge <- left_join(relImportancePrice_groupedbyAge, 
+                                        # relImportanceSound_groupedbyAge)
+RelImportance_groupedbyAge<- cbind(relImportancePrice_groupedbyAge,
+                                   relImportanceSound_groupedbyAge,
+                                   relImportanceBattery_groupedbyAge,
+                                   relImportanceSound_groupedbyAge)
+RelImportance_groupedbyAge <- RelImportance_groupedbyAge[, cbind(-3,-5,-7)]
+RelImportance_groupedbyAge
+
+relImportancePrice_groupedbyIncome <- bluetooth %>% group_by(Income) %>% summarise('Price Mean' = mean(RelImp_price))
+relImportanceSound_groupedbyIncome <- bluetooth %>% group_by(Income) %>% summarise('Sound Mean' = mean(RelImp_sound))
+relImportanceBattery_groupedbyIncome <- bluetooth %>% group_by(Income) %>% summarise('Battery Mean' = mean(RelImp_battery))
+relImportanceWeight_groupedbyIncome <- bluetooth %>% group_by(Income) %>% summarise('Weight Mean' = mean(RelImp_weight))
+
+RelImportance_groupedbyIncome<- cbind(relImportancePrice_groupedbyIncome,
+                                      relImportanceSound_groupedbyIncome,
+                                      relImportanceBattery_groupedbyIncome,
+                                      relImportanceWeight_groupedbyIncome)
+RelImportance_groupedbyIncome <- RelImportance_groupedbyIncome[, cbind(-3,-5,-7)]
+RelImportance_groupedbyIncome
 
 # TO-DO: otomatize edilebilir regex kullanilarak, kafam basmadi suan
 # for (attribute in regexpr('RelImp_*', colnames(bluetooth))) {
@@ -497,7 +531,7 @@ scores
 # bu cok bilenler almaya daha meyilli, such finding!! 
 
 
-###     Relative Importance'a gore : 
+###     Relative Importance'a gore :
 # Cok bilenler neye onem veriyor?
 
 data_relimp <- bluetooth %>%
@@ -804,7 +838,7 @@ fa<-fa(data_factor,method=mle,scores='tenBerge',
        nfactors=2, rotate ="varimax")
 fa # knowledgelari ayr?? factorledi, importancelari ayri factorledi, mantikli.
 
-###      IntentToBuy'a gore : 
+###      IntentToBuy'a gore :
 # Cok onem verenler + bilenler almaya daha mi meyilli?
 scores<-aggregate(fa$scores, by=list(bluetooth$IntentToBuy),mean, na.rm=TRUE)
 scores
