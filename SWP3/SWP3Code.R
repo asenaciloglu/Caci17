@@ -447,14 +447,14 @@ mean(x = sort(x = bluetooth$RelImp_weight)[-c(1, length(x = bluetooth$RelImp_wei
 relImportancePrice_groupedbyAge <- bluetooth %>% group_by(Age) %>% summarise('Price Mean' = mean(RelImp_price))
 relImportanceSound_groupedbyAge <- bluetooth %>% group_by(Age) %>% summarise('Sound Mean' = mean(RelImp_sound))
 relImportanceBattery_groupedbyAge <- bluetooth %>% group_by(Age) %>% summarise('Battery Mean' = mean(RelImp_battery))
-relImportanceSound_groupedbyAge <- bluetooth %>% group_by(Age) %>% summarise('Weight Mean' = mean(RelImp_weight))
+relImportanceWeight_groupedbyAge <- bluetooth %>% group_by(Age) %>% summarise('Weight Mean' = mean(RelImp_weight))
 
 # RelImportance_groupedbyAge <- left_join(relImportancePrice_groupedbyAge, 
                                         # relImportanceSound_groupedbyAge)
 RelImportance_groupedbyAge<- cbind(relImportancePrice_groupedbyAge,
                                    relImportanceSound_groupedbyAge,
                                    relImportanceBattery_groupedbyAge,
-                                   relImportanceSound_groupedbyAge)
+                                   relImportanceWeight_groupedbyAge)
 RelImportance_groupedbyAge <- RelImportance_groupedbyAge[, cbind(-3,-5,-7)]
 RelImportance_groupedbyAge
 
