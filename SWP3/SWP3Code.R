@@ -449,14 +449,15 @@ relImportanceSound_groupedbyAge <- bluetooth %>% group_by(Age) %>% summarise('So
 relImportanceBattery_groupedbyAge <- bluetooth %>% group_by(Age) %>% summarise('Battery Mean' = mean(RelImp_battery))
 relImportanceWeight_groupedbyAge <- bluetooth %>% group_by(Age) %>% summarise('Weight Mean' = mean(RelImp_weight))
 
-# RelImportance_groupedbyAge <- left_join(relImportancePrice_groupedbyAge, 
-                                        # relImportanceSound_groupedbyAge)
+
 RelImportance_groupedbyAge<- cbind(relImportancePrice_groupedbyAge,
                                    relImportanceSound_groupedbyAge,
                                    relImportanceBattery_groupedbyAge,
                                    relImportanceWeight_groupedbyAge)
 RelImportance_groupedbyAge <- RelImportance_groupedbyAge[, cbind(-3,-5,-7)]
 RelImportance_groupedbyAge
+
+write.table(RelImportance_groupedbyAge,file="RelImportance_groupedbyAge.txt")
 
 relImportancePrice_groupedbyIncome <- bluetooth %>% group_by(Income) %>% summarise('Price Mean' = mean(RelImp_price))
 relImportanceSound_groupedbyIncome <- bluetooth %>% group_by(Income) %>% summarise('Sound Mean' = mean(RelImp_sound))
@@ -469,6 +470,9 @@ RelImportance_groupedbyIncome<- cbind(relImportancePrice_groupedbyIncome,
                                       relImportanceWeight_groupedbyIncome)
 RelImportance_groupedbyIncome <- RelImportance_groupedbyIncome[, cbind(-3,-5,-7)]
 RelImportance_groupedbyIncome
+
+write.table(RelImportance_groupedbyIncome,file="RelImportance_groupedbyIncome.txt")
+
 
 # TO-DO: otomatize edilebilir regex kullanilarak, kafam basmadi suan
 # for (attribute in regexpr('RelImp_*', colnames(bluetooth))) {
