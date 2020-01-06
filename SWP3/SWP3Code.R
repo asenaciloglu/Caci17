@@ -873,14 +873,18 @@ boxplot(bluetooth$Income~seg.k$cluster ,
         xlab ="Income", ylab ="Segment",
         horizontal = TRUE )
 library ( cluster )
+png("cluster.png")
 clusplot(bluetooth[c("Gender", "brand_awareness","factor_age.occupation.income.education", "IntentToBuy")] , seg.k$cluster , color =TRUE , shade =TRUE ,
          labels =4, lines =0, main ="K- means cluster plot ")
-
+dev.off()
 table(seg.k$cluster)
 bluetooth$clusters <- seg.k$cluster
+
 table(bluetooth$clusters, bluetooth$Own)
-
-
+table(bluetooth$clusters, bluetooth$IntentToBuy)
+table(bluetooth$clusters, bluetooth$Occupation)
+table(bluetooth$clusters, bluetooth$Income)
+table(bluetooth$clusters, bluetooth$)
 write.csv(bluetooth, "blabla.csv")
 
 
