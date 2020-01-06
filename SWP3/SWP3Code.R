@@ -800,7 +800,7 @@ plot(bluetoothclust)
 bluetoothclust <- hclust(bluetooth.dist, method ="ward.D2")
 plot(bluetoothclust)
 
-bluetoothclust.segment <- cutree(bluetoothclust, k=4)
+bluetoothclust.segment <- cutree(bluetoothclust, k=6)
 str(bluetoothclust.segment)
 
 table(bluetoothclust.segment)
@@ -813,36 +813,16 @@ seg.summ(bluetooth[,-(3:21)],bluetoothclust.segment)
 
 plot(rev(bluetoothclust$height^2))
 plot(rev(bluetoothclust$height^2)[1:50], type="b")
+plot(bluetoothclust$height^2)
 
 bluetoothclust$height
-#
 
-set.seed (1) 
-seg.k <- kmeans(bluetooth.dist , centers =4)
-seg.summ (bluetooth,seg.k$cluster )
+# K-Means
 
-
-
-ss.all<-data.frame(i=1:200,fit=0)
-head(ss.all)
-for(i in 1:200){
-  set.seed(i+100)
-  tmp <- kmeans(bluetooth.dist , centers =4)
-  ss.all[ss.all$i==i,]$fit<-tmp$betweenss
-}
-str(ss.all)
-ss.all[which.max(ss.all$fit), ]
-ss.all[which.min(ss.all$fit), ]
-
-ss.all[1:10,]
-set.seed (11) 
-
+set.seed (456) 
 seg.k <- kmeans(bluetooth.dist , centers =4)
 seg.k
-seg.summ (bluetooth , seg.k$cluster )
-set.seed (182) 
-seg.k <- kmeans(bluetooth.dist , centers =4)
-seg.summ (bluetooth , seg.k$cluster )
+seg.summ (bluetooth[,-(3:21)] , seg.k$cluster )
 
 boxplot(bluetooth$Income~seg.k$cluster ,
         xlab ="Income", ylab ="Segment",
