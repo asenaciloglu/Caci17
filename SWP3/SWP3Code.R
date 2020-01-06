@@ -787,12 +787,11 @@ bluetooth$factor_battery <- fa_relimp$scores[,2]
 bluetooth$factor_weight <- fa_relimp$scores[,3]
 
 data_x<- bluetooth %>%
-  select("Age", "Occupation", "Education", "Income")
+  select("Age", "Education", "Income")
 
 str(data_x)
 data_x$Income <- as.numeric(data_x$Income)
 data_x$Age <- as.numeric(data_x$Age)
-data_x$Occupation <- as.numeric(data_x$Occupation)
 data_x$Education <- as.numeric(data_x$Education)
 
 data_x$Income[data_x$Income == 8] <- median(data_x$Income[data_x$Income != 8])
@@ -855,7 +854,7 @@ plot(bluetoothclust$height^2)
 
 # K-Means
 colnames(bluetooth)
-bluetooth.dist<-dist(apply(bluetooth[c("Gender", "brand_awareness","factor_age.occupation.income.education")],2,scale)) 
+bluetooth.dist<-dist(apply(bluetooth[c("Gender", "brand_awareness","factor_age.occupation.income.education", "IntentToBuy")],2,scale)) 
 #cor(bluetooth[,-c(3:25, 27:30)])
 #corrplot::corrplot(cor(bluetooth[,-c(1:25, 27:30, 33)]))
 
@@ -867,22 +866,22 @@ seg.summ <- function (data,groups) {
   aggregate(data,list(groups), function (x) mean(as.numeric(x)))
 }
 
-seg.summ <-seg.summ (bluetooth[c("Gender", "brand_awareness", "factor_age.occupation.income.education")] , seg.k$cluster )
+seg.summ <-seg.summ (bluetooth[c("Gender", "brand_awareness", "factor_age.occupation.income.education", "IntentToBuy")] , seg.k$cluster )
 seg.summ
 
 boxplot(bluetooth$Income~seg.k$cluster ,
         xlab ="Income", ylab ="Segment",
         horizontal = TRUE )
 library ( cluster )
-clusplot(bluetooth[c("Gender", "brand_awareness","factor_age.occupation.income.education")] , seg.k$cluster , color =TRUE , shade =TRUE ,
+clusplot(bluetooth[c("Gender", "brand_awareness","factor_age.occupation.income.education", "IntentToBuy")] , seg.k$cluster , color =TRUE , shade =TRUE ,
          labels =4, lines =0, main ="K- means cluster plot ")
 
 table(seg.k$cluster)
+bluetooth$clusters <- seg.k$cluster
+table(bluetooth$clusters, bluetooth$Own)
 
 
-
-
-
+write.csv(bluetooth, "blabla.csv")
 
 
 
