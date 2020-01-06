@@ -520,8 +520,6 @@ dev.off()
 
 
 
-
-
 #######              KNOWLEDGE ABOUT SPEAKERS
 
 #1: I know pretty much
