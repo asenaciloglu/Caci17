@@ -476,8 +476,24 @@ RelImportance_groupedbyIncome
 #   lines(density(bluetooth$attribute))
 # }
 
+png("RelativeImportanceHistograms.png")
+
+par(mfrow=c(2, 2)) # aslinda 2ye 2lik bir grafik template i aciyor
+
+hist(bluetooth$RelImp_battery, freq = TRUE, main = 'Battery' , xlab = 'Relative Importance')
+
+hist(bluetooth$RelImp_price, freq = TRUE, main = 'Price', xlab = 'Relative Importance')
+
+hist(bluetooth$RelImp_weight, freq = TRUE, main = 'Weight', xlab = 'Relative Importance')
+
+hist(bluetooth$RelImp_sound, freq = TRUE, main = 'Sound', xlab = 'Relative Importance')
+
+mtext('Histograms of Relative Importances', outer = TRUE, cex = 1.5)
+
+dev.off() 
+
 # Open a png file
-png("RelativeImportanceDists.png")
+png("RelativeImportanceHistograms.png")
 
 par(mfrow=c(2, 2)) # aslinda 2ye 2lik bir grafik template i aciyor
 
