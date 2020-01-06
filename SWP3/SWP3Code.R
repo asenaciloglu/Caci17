@@ -773,13 +773,44 @@ scores_sorted
 # Cok onem verenden az verene : karisik biraz, middle income? :)
 
 
+data_RelImp_factor <- bluetooth %>%
+  select(starts_with("RelImp"))
+
+data_RelImp_factor$RelImp <- NULL
+eigen(cor(data_RelImp_factor))$values
+plot(eigen(cor(data_RelImp_factor))$values)
+fa_relimp<-fa(data_RelImp_factor,method=mle,scores='tenBerge',
+        nfactors=3, rotate ="varimax")
+fa_relimp
+bluetooth$factor_price.sound <- fa_relimp$scores[,1]
+bluetooth$factor_battery <- fa_relimp$scores[,2]
+bluetooth$factor_weight <- fa_relimp$scores[,3]
+
+data_x<- bluetooth %>%
+  select("Age", "Occupation", "Education", "Income")
+
+str(data_x)
+data_x$Income <- as.numeric(data_x$Income)
+data_x$Age <- as.numeric(data_x$Age)
+data_x$Occupation <- as.numeric(data_x$Occupation)
+data_x$Education <- as.numeric(data_x$Education)
+
+data_x$Income[data_x$Income == 8] <- median(data_x$Income[data_x$Income != 8])
+eigen(cor(data_x))$values
+plot(eigen(cor(data_x))$values)
+fa_x<-fa(data_x,method=mle,scores='tenBerge',
+              nfactors=1, rotate ="varimax")
+fa_x
+bluetooth$factor_age.occupation.income.education <- fa_x$scores
+
+
+
 #### CLUSTERING
-
-
 # Cluster Persons from bluetooth speaker questionaire
 table(bluetooth$Own)
-library(stringr)
 
+library(stringr)
+colnames(bluetooth)
 bluetooth <- bluetooth[,!str_detect(colnames(bluetooth), "Label")]
 bluetooth$RelImp <- NULL
 bluetooth$id <- NULL
@@ -788,14 +819,14 @@ bluetooth$Residence <- NULL
 bluetooth$Income <- as.numeric(bluetooth$Income)
 bluetooth$Income[bluetooth$Income == 8] <- median(bluetooth$Income[bluetooth$Income != 8])
 bluetooth$brand_awareness <- as.numeric(bluetooth$brand_awareness)                    
-                                           
-colnames(bluetooth[,-(2:20)])
-str(bluetooth[,-(2:20)])
-bluetooth.dist<-dist(apply(bluetooth[,-(2:20)],2,scale)) 
+
+colnames(bluetooth)                                            
+colnames(bluetooth[,-c(1:25, 27:30, 32:33)])
+
+bluetooth.dist<-dist(apply(bluetooth[,-c(1:25, 27:30, 32:33)],2,scale)) 
 str(bluetooth.dist)
 bluetooth.dist
 
-table(bluetooth$Own)
 
 as.matrix(bluetooth.dist)[1:5,1:5]
 
@@ -813,38 +844,43 @@ seg.summ <- function (data,groups) {
   aggregate(data,list(groups), function (x) mean(as.numeric(x)))
 }
 
-seg.summ(bluetooth[,-(2:20)],bluetoothclust.segment)
+seg.summ(bluetooth[,-(3:21)],bluetoothclust.segment)
 
 plot(rev(bluetoothclust$height^2))
 plot(rev(bluetoothclust$height^2)[1:50], type="b")
 plot(bluetoothclust$height^2)
 
-bluetoothclust$height
 
 # K-Means
 
-cor(bluetooth[,-(3:21)])
-corrplot::corrplot(cor(bluetooth[,-(2:20)]))
+cor(bluetooth[,-c(3:25, 27:30)])
+corrplot::corrplot(cor(bluetooth[,-c(1:25, 27:30, 33)]))
 
 set.seed (12345) 
-seg.k <- kmeans(bluetooth.dist , centers =10)
+seg.k <- kmeans(bluetooth.dist , centers =6 )
 seg.k
 
 seg.summ <- function (data,groups) {
   aggregate(data,list(groups), function (x) mean(as.numeric(x)))
 }
 
-seg.summ <-seg.summ (bluetooth[,-(2:20)] , seg.k$cluster )
+seg.summ <-seg.summ (bluetooth[,-c(1:25, 27:30, 32:33)] , seg.k$cluster )
 seg.summ
 
 boxplot(bluetooth$Income~seg.k$cluster ,
         xlab ="Income", ylab ="Segment",
         horizontal = TRUE )
 library ( cluster )
-clusplot(bluetooth[,-(2:20)] , seg.k$cluster , color =TRUE , shade =TRUE ,
+clusplot(bluetooth[,-c(1:25, 27:30, 32:33)] , seg.k$cluster , color =TRUE , shade =TRUE ,
          labels =4, lines =0, main ="K- means cluster plot ")
 
 table(seg.k$cluster)
+
+
+
+
+
+
 
 
 ### ---- Other Descriptive Analytics (Kodlarimiz karismasin diye section actim buraya) ----
