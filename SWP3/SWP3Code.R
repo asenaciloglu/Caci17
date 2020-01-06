@@ -522,7 +522,7 @@ mtext('Distribution of Relative Importances', outer = TRUE, cex = 1.5)
 # Close the png file
 dev.off() 
 
-
+table(bluetooth$Own)
 
 #######              KNOWLEDGE ABOUT SPEAKERS
 
@@ -531,8 +531,10 @@ dev.off()
 #3: expert (among the circle of friends)
 #4: I know less (compared to most other people)
 #5: I really don???t know
-
-data_subjknow <- bluetooth %>%
+library(tidyverse)
+library(dplyr)
+library(plyr)
+data_subjknow <- bluetooth %>% 
   select(starts_with("SubjKnow"))
 
 ####      FACTOR ANALYSIS
@@ -645,7 +647,7 @@ scores_sorted
 
 # Cok bilenden az bilene : zenginler daha cok biliyor genelde :)
 
-
+table(bluetooth$Own)
 
 
 ####                  IS IT IMPORTANT?
@@ -775,23 +777,25 @@ scores_sorted
 
 
 # Cluster Persons from bluetooth speaker questionaire
-
+table(bluetooth$Own)
 library(stringr)
 
-bluetooth[,-str_detect(colnames(bluetooth), "Label")]
+bluetooth <- bluetooth[,!str_detect(colnames(bluetooth), "Label")]
 bluetooth$RelImp <- NULL
 bluetooth$id <- NULL
 bluetooth$Residence <- NULL
 
 bluetooth$Income <- as.numeric(bluetooth$Income)
-bluetooth[bluetooth$Income ==8] <- median(as.numeric(bluetooth$Income[bluetooth$Income != 8]))
+bluetooth$Income[bluetooth$Income == 8] <- median(bluetooth$Income[bluetooth$Income != 8])
 bluetooth$brand_awareness <- as.numeric(bluetooth$brand_awareness)                    
                                            
-colnames(bluetooth[,-(3:21)])
-str(bluetooth[,-(3:21)])
-bluetooth.dist<-dist(apply(bluetooth[,-(3:21)],2,scale)) 
+colnames(bluetooth[,-(2:20)])
+str(bluetooth[,-(2:20)])
+bluetooth.dist<-dist(apply(bluetooth[,-(2:20)],2,scale)) 
 str(bluetooth.dist)
 bluetooth.dist
+
+table(bluetooth$Own)
 
 as.matrix(bluetooth.dist)[1:5,1:5]
 
@@ -809,7 +813,7 @@ seg.summ <- function (data,groups) {
   aggregate(data,list(groups), function (x) mean(as.numeric(x)))
 }
 
-seg.summ(bluetooth[,-(3:21)],bluetoothclust.segment)
+seg.summ(bluetooth[,-(2:20)],bluetoothclust.segment)
 
 plot(rev(bluetoothclust$height^2))
 plot(rev(bluetoothclust$height^2)[1:50], type="b")
@@ -819,20 +823,28 @@ bluetoothclust$height
 
 # K-Means
 
-set.seed (456) 
-seg.k <- kmeans(bluetooth.dist , centers =4)
+cor(bluetooth[,-(3:21)])
+corrplot::corrplot(cor(bluetooth[,-(2:20)]))
+
+set.seed (12345) 
+seg.k <- kmeans(bluetooth.dist , centers =10)
 seg.k
-seg.summ (bluetooth[,-(3:21)] , seg.k$cluster )
+
+seg.summ <- function (data,groups) {
+  aggregate(data,list(groups), function (x) mean(as.numeric(x)))
+}
+
+seg.summ <-seg.summ (bluetooth[,-(2:20)] , seg.k$cluster )
+seg.summ
 
 boxplot(bluetooth$Income~seg.k$cluster ,
         xlab ="Income", ylab ="Segment",
         horizontal = TRUE )
 library ( cluster )
-clusplot(bluetooth , seg.k$cluster , color =TRUE , shade =TRUE ,
+clusplot(bluetooth[,-(2:20)] , seg.k$cluster , color =TRUE , shade =TRUE ,
          labels =4, lines =0, main ="K- means cluster plot ")
 
-
-
+table(seg.k$cluster)
 
 
 ### ---- Other Descriptive Analytics (Kodlarimiz karismasin diye section actim buraya) ----
