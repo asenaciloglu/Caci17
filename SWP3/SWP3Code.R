@@ -457,7 +457,7 @@ RelImportance_groupedbyAge<- cbind(relImportancePrice_groupedbyAge,
 RelImportance_groupedbyAge <- RelImportance_groupedbyAge[, cbind(-3,-5,-7)]
 RelImportance_groupedbyAge
 
-write.table(RelImportance_groupedbyAge,file="RelImportance_groupedbyAge.txt")
+write.table(RelImportance_groupedbyAge,file="RelImportance_groupedbyAge.txt", sep = '|')
 
 relImportancePrice_groupedbyIncome <- bluetooth %>% group_by(Income) %>% summarise('Price Mean' = mean(RelImp_price))
 relImportanceSound_groupedbyIncome <- bluetooth %>% group_by(Income) %>% summarise('Sound Mean' = mean(RelImp_sound))
@@ -471,7 +471,7 @@ RelImportance_groupedbyIncome<- cbind(relImportancePrice_groupedbyIncome,
 RelImportance_groupedbyIncome <- RelImportance_groupedbyIncome[, cbind(-3,-5,-7)]
 RelImportance_groupedbyIncome
 
-write.table(RelImportance_groupedbyIncome,file="RelImportance_groupedbyIncome.txt")
+write.table(RelImportance_groupedbyIncome,file="RelImportance_groupedbyIncome.txt", sep = '|')
 
 
 # TO-DO: otomatize edilebilir regex kullanilarak, kafam basmadi suan
