@@ -431,7 +431,7 @@ total_matrix
 # genel data da insanlar neyi onemsemis, en fazla degerler vs....
 relImportanceEveryone <- cbind(summary(bluetooth$RelImp_battery), summary(bluetooth$RelImp_price),
                        summary(bluetooth$RelImp_weight), summary(bluetooth$RelImp_sound) )
-colnames(relImportance) <- (cbind('Battery', 'Price', 'Weight', 'Sound'))
+colnames(relImportanceEveryone) <- (cbind('Battery', 'Price', 'Weight', 'Sound'))
 
 mean(x = sort(x = bluetooth$RelImp_weight)[-c(1, length(x = bluetooth$RelImp_weight))])
 
@@ -769,6 +769,90 @@ scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
 scores_sorted
 
 # Cok onem verenden az verene : karisik biraz, middle income? :)
+
+
+#### CLUSTERING
+
+
+# Cluster Persons from bluetooth speaker questionaire
+
+library(stringr)
+
+bluetooth[,-str_detect(colnames(bluetooth), "Label")]
+bluetooth$RelImp <- NULL
+bluetooth$id <- NULL
+bluetooth$Residence <- NULL
+
+bluetooth$Income <- as.numeric(bluetooth$Income)
+bluetooth[bluetooth$Income ==8] <- median(as.numeric(bluetooth$Income[bluetooth$Income != 8]))
+bluetooth$brand_awareness <- as.numeric(bluetooth$brand_awareness)                    
+                                           
+colnames(bluetooth[,-(3:21)])
+str(bluetooth[,-(3:21)])
+bluetooth.dist<-dist(apply(bluetooth[,-(3:21)],2,scale)) 
+str(bluetooth.dist)
+bluetooth.dist
+
+as.matrix(bluetooth.dist)[1:5,1:5]
+
+bluetoothclust <- hclust(bluetooth.dist, method ="single")
+plot(bluetoothclust)
+bluetoothclust <- hclust(bluetooth.dist, method ="ward.D2")
+plot(bluetoothclust)
+
+bluetoothclust.segment <- cutree(bluetoothclust, k=4)
+str(bluetoothclust.segment)
+
+table(bluetoothclust.segment)
+
+seg.summ <- function (data,groups) {
+  aggregate(data,list(groups), function (x) mean(as.numeric(x)))
+}
+
+seg.summ(bluetooth[,-(3:21)],bluetoothclust.segment)
+
+plot(rev(bluetoothclust$height^2))
+plot(rev(bluetoothclust$height^2)[1:50], type="b")
+
+bluetoothclust$height
+
+
+set.seed (1) 
+seg.k <- kmeans(bluetooth.dist , centers =4)
+seg.summ (bluetooth,seg.k$cluster )
+
+
+
+ss.all<-data.frame(i=1:200,fit=0)
+head(ss.all)
+for(i in 1:200){
+  set.seed(i+100)
+  tmp <- kmeans(bluetooth.dist , centers =4)
+  ss.all[ss.all$i==i,]$fit<-tmp$betweenss
+}
+str(ss.all)
+ss.all[which.max(ss.all$fit), ]
+ss.all[which.min(ss.all$fit), ]
+
+ss.all[1:10,]
+set.seed (11) 
+
+seg.k <- kmeans(bluetooth.dist , centers =4)
+seg.k
+seg.summ (bluetooth , seg.k$cluster )
+set.seed (182) 
+seg.k <- kmeans(bluetooth.dist , centers =4)
+seg.summ (bluetooth , seg.k$cluster )
+
+boxplot(bluetooth$Income~seg.k$cluster ,
+        xlab ="Income", ylab ="Segment",
+        horizontal = TRUE )
+library ( cluster )
+clusplot(bluetooth , seg.k$cluster , color =TRUE , shade =TRUE ,
+         labels =4, lines =0, main ="K- means cluster plot ")
+
+
+
 
 
 ### ---- Other Descriptive Analytics (Kodlarimiz karismasin diye section actim buraya) ----
