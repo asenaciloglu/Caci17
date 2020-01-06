@@ -542,7 +542,7 @@ plot(eigen(cor(data_subjknow))$values) # 1 tane factor yap diyor, ilk eigenvalue
 fa<-fa(data_subjknow,method=mle,scores='tenBerge',
        nfactors=1, rotate ="varimax")
 fa
-
+bluetooth$fa <- fa$scores
 
 ###      IntentToBuy'a gore : 
 # Cok bilenler almaya daha mi meyilli?
@@ -663,13 +663,14 @@ data_PII <- bluetooth %>%
 # Eigenvalue -- finding the optimal number of factors
 eigen(cor(data_PII))$values
 plot(eigen(cor(data_PII))$values) # 1 tane factor yap diyor, ilk eigenvalue: 3,47, ikinci: 0.56
-fa<-fa(data_PII,method=mle,scores='tenBerge',
+fa2<-fa(data_PII,method=mle,scores='tenBerge',
        nfactors=1, rotate ="varimax")
-fa
+fa2
+bluetooth$fa2 <- fa2$scores
 
 ###      IntentToBuy'a gore : 
 # Cok onem verenler almaya daha mi meyilli?
-scores<-aggregate(fa$scores, by=list(bluetooth$IntentToBuy),mean, na.rm=TRUE)
+scores<-aggregate(fa2$scores, by=list(bluetooth$IntentToBuy),mean, na.rm=TRUE)
 scores
 
 # scores: IntentToBuy = 0 icin -0.139 , IntentToBuy = 1 icin 0.278, 
@@ -679,7 +680,7 @@ scores
 ###       Relative Importance'a gore : 
 # Cok onem verenler neye onem veriyor?
 
-scores<-aggregate(fa$scores, by=list(bluetooth$RelImp),mean, na.rm=TRUE)
+scores<-aggregate(fa2$scores, by=list(bluetooth$RelImp),mean, na.rm=TRUE)
 scores
 
 # RelImp_battery : 1
@@ -693,7 +694,7 @@ scores
 ###     Gender'a gore : 
 # Cok bilenlerin cinsiyeti ne? 
 
-scores<-aggregate(fa$scores, by=list(bluetooth$GenderLabel),mean, na.rm=TRUE)
+scores<-aggregate(fa2$scores, by=list(bluetooth$GenderLabel),mean, na.rm=TRUE)
 scores
 scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
 scores_sorted
@@ -707,7 +708,7 @@ scores_sorted
 
 levels(bluetooth$AgeLabel)
 # 8 level var, "1": <18 ve "8": >=50
-scores<-aggregate(fa$scores, by=list(bluetooth$AgeLabel),mean, na.rm=TRUE)
+scores<-aggregate(fa2$scores, by=list(bluetooth$AgeLabel),mean, na.rm=TRUE)
 scores
 scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
 scores_sorted
@@ -722,7 +723,7 @@ scores_sorted
 
 levels(bluetooth$Residence)
 # 38 level var.
-scores<-aggregate(fa$scores, by=list(bluetooth$Residence),mean, na.rm=TRUE)
+scores<-aggregate(fa2$scores, by=list(bluetooth$Residence),mean, na.rm=TRUE)
 scores
 scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
 scores_sorted
@@ -736,7 +737,7 @@ scores_sorted
 
 levels(bluetooth$OccupationLabel)
 # 5 level var.
-scores<-aggregate(fa$scores, by=list(bluetooth$OccupationLabel),mean, na.rm=TRUE)
+scores<-aggregate(fa2$scores, by=list(bluetooth$OccupationLabel),mean, na.rm=TRUE)
 scores
 scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
 scores_sorted
@@ -749,7 +750,7 @@ scores_sorted
 
 levels(bluetooth$EducationLabel)
 # 5 level var.
-scores<-aggregate(fa$scores, by=list(bluetooth$EducationLabel),mean, na.rm=TRUE)
+scores<-aggregate(fa2$scores, by=list(bluetooth$EducationLabel),mean, na.rm=TRUE)
 scores
 scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
 scores_sorted
@@ -762,7 +763,7 @@ scores_sorted
 
 levels(bluetooth$IncomeLabel)
 # 8 level var.
-scores<-aggregate(fa$scores, by=list(bluetooth$IncomeLabel),mean, na.rm=TRUE)
+scores<-aggregate(fa2$scores, by=list(bluetooth$IncomeLabel),mean, na.rm=TRUE)
 scores
 scores_sorted <- scores[order(scores[, "MR1"]), , drop = FALSE]
 scores_sorted
