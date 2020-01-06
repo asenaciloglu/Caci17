@@ -815,7 +815,7 @@ plot(rev(bluetoothclust$height^2))
 plot(rev(bluetoothclust$height^2)[1:50], type="b")
 
 bluetoothclust$height
-
+#
 
 set.seed (1) 
 seg.k <- kmeans(bluetooth.dist , centers =4)
