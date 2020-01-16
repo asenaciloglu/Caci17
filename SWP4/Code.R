@@ -4,8 +4,6 @@ install.packages('mlogit')
 library(mlogit)
 library(data.table)
 
-getwd()
-setwd("/Users/edanurkahvecioglu/Desktop")
 data.cbc<-read.csv("cbc_data.csv")
 data.cbc$price<-data.cbc$price/100
 head(data.cbc,8)
