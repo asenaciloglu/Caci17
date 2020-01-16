@@ -44,4 +44,4 @@ MarketSimulation$price<-MarketSimulation$price/100
 head(MarketSimulation,12)
 
 
-predict.mnl(mnl_bluetooth,MarketSimulation)
+deneme <- predict.mnl(mnl_bluetooth,data.cbc[data.cbc$id == 6 ,])
