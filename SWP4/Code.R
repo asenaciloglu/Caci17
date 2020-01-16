@@ -1,5 +1,5 @@
 # essalatu
-setwd("C:/Users/klapperd/Dropbox/Humboldt/Lehre/CACI/WS1819/Data")
+setwd(("~/Caci17/SWP4"))
 install.packages('mlogit')
 library(mlogit)
 library(data.table)
