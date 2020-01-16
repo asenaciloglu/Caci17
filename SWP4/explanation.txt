@@ -57,7 +57,7 @@ COLUMNS 1 TO 5 INCLUDE:
 
 id     - index for the respondents. PLEASE NOTE that this is not 
          necessarily sequential 
-         (in total 300 ids). 
+         (in total 593 ids). 
 
 cs     - index of the choice tasks 
          (12 choice tasks per each id)
