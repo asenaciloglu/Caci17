@@ -17,8 +17,6 @@ mnl_bluetooth = mlogit(choice ~ -1 + none+price+battery1+battery2+battery3+batte
                          sound1+sound2+sound3, data = data_ml_bluetooth)
 summary(mnl_bluetooth)
 
-summary(data_ml_bluetooth)
-data_ml_bluetooth
 
 predict.mnl <- function(model , data ) {
   data.model <- model.matrix(
