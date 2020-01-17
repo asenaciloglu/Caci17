@@ -1,4 +1,4 @@
-# essalatu
+# essalatu----- Conjoint Analysis for the complete data----
 setwd(("~/Caci17/SWP4"))
 # install.packages('mlogit')
 library(mlogit)
@@ -45,3 +45,5 @@ head(MarketSimulation,12)
 
 
 deneme <- predict.mnl(mnl_bluetooth,data.cbc[data.cbc$id == 6 ,])
+
+#----------- Upload SWP3 data with clusters ----
