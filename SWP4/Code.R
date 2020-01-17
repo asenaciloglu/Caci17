@@ -111,8 +111,7 @@ predict.mnl <- function(model , data ) {
 
 deneme <- predict.mnl(mnl_bluetooth,data.cbc_1[data.cbc_1$id == 6 ,])
 
-# bunu for loopta yaz
-
+# tüm cluster icin uygulayip kisi bazinda max cekiyorum
 deneme1 <- predict.mnl(mnl_bluetooth,data.cbc_1)
 offer_1 <- as.data.table(deneme1)[,.SD[which.max(share)],by=id]
 
@@ -158,6 +157,9 @@ predict.mnl <- function(model , data ) {
 
 deneme <- predict.mnl(mnl_bluetooth,data.cbc_2[data.cbc_2$id == 6 ,])
 
+# tüm cluster icin uygulayip kisi bazinda max cekiyorum
+deneme2 <- predict.mnl(mnl_bluetooth,data.cbc_2)
+offer_2 <- as.data.table(deneme2)[,.SD[which.max(share)],by=id]
 
 
 #---- conjoint for cluster 3----
@@ -202,6 +204,10 @@ predict.mnl <- function(model , data ) {
 
 deneme <- predict.mnl(mnl_bluetooth,data.cbc_3[data.cbc_3$id == 6 ,])
 
+# tüm cluster icin uygulayip kisi bazinda max cekiyorum
+deneme3 <- predict.mnl(mnl_bluetooth,data.cbc_3)
+offer_3 <- as.data.table(deneme3)[,.SD[which.max(share)],by=id]
+
 
 #---- conjoint for cluster 4----
 data.cbc_4$price<-data.cbc_4$price/100 # niye abi ne alaka
@@ -244,3 +250,7 @@ predict.mnl <- function(model , data ) {
 
 
 deneme <- predict.mnl(mnl_bluetooth,data.cbc_4[data.cbc_4$id == 6 ,])
+
+# tüm cluster icin uygulayip kisi bazinda max cekiyorum
+deneme4 <- predict.mnl(mnl_bluetooth,data.cbc_4)
+offer_4 <- as.data.table(deneme4)[,.SD[which.max(share)],by=id]
