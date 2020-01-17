@@ -111,6 +111,10 @@ predict.mnl <- function(model , data ) {
 
 deneme <- predict.mnl(mnl_bluetooth,data.cbc_1[data.cbc_1$id == 6 ,])
 
+# bunu for loopta yaz
+
+deneme1 <- predict.mnl(mnl_bluetooth,data.cbc_1)
+offer_1 <- as.data.table(deneme1)[,.SD[which.max(share)],by=id]
 
 #---- conjoint for cluster 2----
 data.cbc_2$price<-data.cbc_2$price/100 # niye abi ne alaka
