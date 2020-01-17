@@ -1,6 +1,6 @@
 # essalatu----- Conjoint Analysis for the complete data----
 setwd(("~/Caci17/SWP4"))
-# install.packages('mlogit')
+#install.packages('mlogit')
 library(mlogit)
 library(data.table)
 
@@ -47,3 +47,15 @@ head(MarketSimulation,12)
 deneme <- predict.mnl(mnl_bluetooth,data.cbc[data.cbc$id == 6 ,])
 
 #----------- Upload SWP3 data with clusters ----
+bluetooth <- read.csv("new_indiv.csv")
+bluetooth1 <- bluetooth[bluetooth$clusters == "1", ]
+id1 <- bluetooth1$id
+bluetooth2 <- bluetooth[bluetooth$clusters == "2", ]
+id2 <- bluetooth2$id
+bluetooth3 <- bluetooth[bluetooth$clusters == "3", ]
+id3 <- bluetooth3$id
+bluetooth4 <- bluetooth[bluetooth$clusters == "4", ]
+id4 <- bluetooth4$id
+
+# select cluster members from cbc data
+deneyelim <- dt[dt$fct %in% vc,]
