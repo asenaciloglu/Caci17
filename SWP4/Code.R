@@ -157,7 +157,6 @@ deneme <- predict.mnl(mnl_bluetooth,data.cbc_2[data.cbc_2$id == 6 ,])
 
 
 #---- conjoint for cluster 3----
-data.cbc_3<-read.csv("cbc_data.csv")
 data.cbc_3$price<-data.cbc_3$price/100 # niye abi ne alaka
 
 # adding dummies for ommited variables
@@ -201,7 +200,6 @@ deneme <- predict.mnl(mnl_bluetooth,data.cbc_3[data.cbc_3$id == 6 ,])
 
 
 #---- conjoint for cluster 4----
-data.cbc_4<-read.csv("cbc_data.csv")
 data.cbc_4$price<-data.cbc_4$price/100 # niye abi ne alaka
 
 # adding dummies for ommited variables
