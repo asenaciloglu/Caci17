@@ -70,7 +70,7 @@ deneme <- predict.mnl(mnl_bluetooth,data.cbc[data.cbc$id == 6 ,])
 
 
 #---- conjoint for cluster 1----
-data.cbc_1$price<-data.cbc_1$price/100 # niye abi ne alaka
+data.cbc_1$price <- data.cbc_1$price/100 # niye abi ne alaka
 
 # adding dummies for ommited variables
 data.cbc_1$weight4 <- ifelse(data.cbc_1$weight1 == 0 & data.cbc_1$weight2 == 0 & 
@@ -104,16 +104,20 @@ predict.mnl <- function(model , data ) {
 }
 
 
-#MarketSimulation <- read.csv("marketsimulation.csv")
-#MarketSimulation$price<-MarketSimulation$price/100
-#head(MarketSimulation,12)
-
-
 deneme <- predict.mnl(mnl_bluetooth,data.cbc_1[data.cbc_1$id == 6 ,])
 
 # tüm cluster icin uygulayip kisi bazinda max cekiyorum
-deneme1 <- predict.mnl(mnl_bluetooth,data.cbc_1)
-offer_1 <- as.data.table(deneme1)[,.SD[which.max(share)],by=id]
+# deneme1 <- predict.mnl(mnl_bluetooth,data.cbc_1)
+# offer_1 <- as.data.table(deneme1)[,.SD[which.max(share)],by=id]
+
+# cluster daki her abi/abla ustunden donup max share ini alıp offer1 df sine eklemece
+a = 1
+offerDenemee = data.frame()
+for (x in unique(data.cbc_1$id)) {
+  predictionCase <- predict.mnl(mnl_bluetooth,data.cbc_1[data.cbc_1$id == x ,])
+  offer1 <- rbind(offerDenemee, predictionCase[which.max(predictionCase$share),])
+  a = a+1
+}
 
 #---- conjoint for cluster 2----
 data.cbc_2$price<-data.cbc_2$price/100 # niye abi ne alaka
