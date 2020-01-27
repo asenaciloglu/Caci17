@@ -123,7 +123,7 @@ offer1$AttributeCombined <- apply(offer1[, cols] ,1,paste , collapse = '') # uru
 offer1$count <- ave(as.numeric(offer1$id), offer1$AttributeCombined, FUN = length)
 
 offer1_fave <- offer1[which.max(offer1$count),]
-
+offer1$fave <-NULL
 
 
 #---- conjoint for cluster 2----
@@ -229,3 +229,9 @@ offer4$count <- ave(as.numeric(offer4$id), offer4$AttributeCombined, FUN = lengt
 
 offer4_fave <- offer4[which.max(offer4$count),]
 offer4_fave
+
+
+faves <- rbind(offer1_fave, offer2_fave, offer3_fave, offer4_fave)
+faves$cluster <- c(1,2,3,4)
+faves$clusterRespondents <- c(151, 185, 60, 179)
+faves$percentage <- c(0.10, 0.09, 0.11, 0.11)
