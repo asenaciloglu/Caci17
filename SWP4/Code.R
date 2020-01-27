@@ -109,15 +109,22 @@ deneme <- predict.mnl(mnl1_bluetooth, data.cbc_1[data.cbc_1$id == 9 ,])
 # offer_1 <- as.data.table(deneme1)[,.SD[which.max(share)],by=id]
 
 # cluster daki her abi/abla ustunden donup max share ini alıp offer1 df sine eklemece
-a = 1
-offerDenemee = vector()
 offer1 = data.frame()
 
 for (x in unique(data.cbc_1$id)) {
   predictionCase <- predict.mnl(mnl_bluetooth, data.cbc_1[data.cbc_1$id == x ,])
   offer1 <- rbind(offer1, as.vector(predictionCase[which.max(predictionCase$share),]))
-  a = a + 1
 }
+
+cols = as.vector(colnames(data.cbc))[6:19] # price tan... son attribute a
+
+offer1$AttributeCombined <- apply(offer1[, cols] ,1,paste , collapse = '') # urun kodu
+
+offer1$count <- ave(as.numeric(offer1$id), offer1$AttributeCombined, FUN = length)
+
+offer1_fave <- offer1[which.max(offer1$count),]
+
+
 
 #---- conjoint for cluster 2----
 data.cbc_2$price<-data.cbc_2$price/100 # niye abi ne alaka
@@ -134,45 +141,27 @@ data.cbc_2$battery5 <- ifelse(data.cbc_2$battery1 == 0 & data.cbc_2$battery2 == 
 head(data.cbc_2,8)
 str(data.cbc_2)
 
-data_ml_bluetooth <- mlogit.data(data = data.cbc_2, choice = "choice", shape = "long",
+data2_ml_bluetooth <- mlogit.data(data = data.cbc_2, choice = "choice", shape = "long",
                                  id.var = "id", alt.var = "alt")
 
-mnl_bluetooth = mlogit(choice ~ -1 + none + price +
+mnl2_bluetooth = mlogit(choice ~ -1 + none + price +
                          battery2 + battery3 + battery4 + battery5
                        + weight2 + weight3 + weight4 +
-                         sound2 + sound3 + sound4, data = data_ml_bluetooth)
-summary(mnl_bluetooth)
+                         sound2 + sound3 + sound4, data = data2_ml_bluetooth)
 
 
-predict.mnl <- function(model , data ) {
-  data.model <- model.matrix(
-    update(model$formula, 0 ~ .),
-    data = data )
-  utility <- data.model %*% model$coef
-  share <- exp( utility )/sum (exp ( utility ))
-  cbind (share , data )
-}
-
-
-offerDenemee = data.frame()
+offer2 = data.frame()
 
 for (x in unique(data.cbc_2$id)) {
   predictionCase <- predict.mnl(mnl_bluetooth, data.cbc_2[data.cbc_2$id == x ,])
-  offer2 <- rbind(offerDenemee, predictionCase[which.max(predictionCase$share),])
-  #a = a + 1
+  offer2 <- rbind(offer2, as.vector(predictionCase[which.max(predictionCase$share),]))
 }
 
-#MarketSimulation <- read.csv("marketsimulation.csv")
-#MarketSimulation$price<-MarketSimulation$price/100
-#head(MarketSimulation,12)
+offer2$AttributeCombined <- apply(offer2[, cols] ,1,paste , collapse = '') # urun kodu
 
+offer2$count <- ave(as.numeric(offer2$id), offer2$AttributeCombined, FUN = length)
 
-deneme <- predict.mnl(mnl_bluetooth,data.cbc_2[data.cbc_2$id == 6 ,])
-
-# tüm cluster icin uygulayip kisi bazinda max cekiyorum
-deneme2 <- predict.mnl(mnl_bluetooth,data.cbc_2)
-offer_2 <- as.data.table(deneme2)[,.SD[which.max(share)],by=id]
-
+offer2_fave <- offer2[which.max(offer2$count),]
 
 #---- conjoint for cluster 3----
 data.cbc_3$price<-data.cbc_3$price/100 # niye abi ne alaka
@@ -186,40 +175,27 @@ data.cbc_3$battery5 <- ifelse(data.cbc_3$battery1 == 0 & data.cbc_3$battery2 == 
                               data.cbc_3$battery3 == 0 & data.cbc_3$battery4 == 0, 1, 0)
 
 
-head(data.cbc_3,8)
-str(data.cbc_3)
-
-data_ml_bluetooth <- mlogit.data(data = data.cbc_3, choice = "choice", shape = "long",
+data3_ml_bluetooth <- mlogit.data(data = data.cbc_3, choice = "choice", shape = "long",
                                  id.var = "id", alt.var = "alt")
 
-mnl_bluetooth = mlogit(choice ~ -1 + none + price +
+mnl3_bluetooth = mlogit(choice ~ -1 + none + price +
                          battery2 + battery3 + battery4 + battery5
                        + weight2 + weight3 + weight4 +
-                         sound2 + sound3 + sound4, data = data_ml_bluetooth)
-summary(mnl_bluetooth)
+                         sound2 + sound3 + sound4, data = data3_ml_bluetooth)
 
+offer3 = data.frame()
 
-predict.mnl <- function(model , data ) {
-  data.model <- model.matrix(
-    update(model$formula, 0 ~ .),
-    data = data )
-  utility <- data.model %*% model$coef
-  share <- exp( utility )/sum (exp ( utility ))
-  cbind (share , data )
+for (x in unique(data.cbc_3$id)) {
+  predictionCase <- predict.mnl(mnl3_bluetooth, data.cbc_3[data.cbc_3$id == x ,])
+  offer3 <- rbind(offer3, as.vector(predictionCase[which.max(predictionCase$share),]))
 }
 
+offer3$AttributeCombined <- apply(offer3[, cols] ,1,paste , collapse = '') # urun kodu
 
-#MarketSimulation <- read.csv("marketsimulation.csv")
-#MarketSimulation$price<-MarketSimulation$price/100
-#head(MarketSimulation,12)
+offer3$count <- ave(as.numeric(offer3$id), offer3$AttributeCombined, FUN = length)
 
-
-deneme <- predict.mnl(mnl_bluetooth,data.cbc_3[data.cbc_3$id == 6 ,])
-
-# tüm cluster icin uygulayip kisi bazinda max cekiyorum
-deneme3 <- predict.mnl(mnl_bluetooth,data.cbc_3)
-offer_3 <- as.data.table(deneme3)[,.SD[which.max(share)],by=id]
-
+offer3_fave <- offer3[which.max(offer3$count),]
+offer3_fave
 
 #---- conjoint for cluster 4----
 data.cbc_4$price<-data.cbc_4$price/100 # niye abi ne alaka
@@ -232,37 +208,24 @@ data.cbc_4$sound4 <- ifelse(data.cbc_4$sound1 == 0 & data.cbc_4$sound2 == 0 &
 data.cbc_4$battery5 <- ifelse(data.cbc_4$battery1 == 0 & data.cbc_4$battery2 == 0 & 
                                 data.cbc_4$battery3 == 0 & data.cbc_4$battery4 == 0, 1, 0)
 
-
-head(data.cbc_4,8)
-str(data.cbc_4)
-
-data_ml_bluetooth <- mlogit.data(data = data.cbc_4, choice = "choice", shape = "long",
+data4_ml_bluetooth <- mlogit.data(data = data.cbc_4, choice = "choice", shape = "long",
                                  id.var = "id", alt.var = "alt")
 
-mnl_bluetooth = mlogit(choice ~ -1 + none + price +
+mnl4_bluetooth = mlogit(choice ~ -1 + none + price +
                          battery2 + battery3 + battery4 + battery5
                        + weight2 + weight3 + weight4 +
-                         sound2 + sound3 + sound4, data = data_ml_bluetooth)
-summary(mnl_bluetooth)
+                         sound2 + sound3 + sound4, data = data4_ml_bluetooth)
 
+offer4 = data.frame()
 
-predict.mnl <- function(model , data ) {
-  data.model <- model.matrix(
-    update(model$formula, 0 ~ .),
-    data = data )
-  utility <- data.model %*% model$coef
-  share <- exp( utility )/sum (exp ( utility ))
-  cbind (share , data )
+for (x in unique(data.cbc_4$id)) {
+  predictionCase <- predict.mnl(mnl4_bluetooth, data.cbc_4[data.cbc_4$id == x ,])
+  offer4 <- rbind(offer4, as.vector(predictionCase[which.max(predictionCase$share),]))
 }
 
+offer4$AttributeCombined <- apply(offer4[, cols] ,1,paste , collapse = '') # urun kodu
 
-#MarketSimulation <- read.csv("marketsimulation.csv")
-#MarketSimulation$price<-MarketSimulation$price/100
-#head(MarketSimulation,12)
+offer4$count <- ave(as.numeric(offer4$id), offer4$AttributeCombined, FUN = length)
 
-
-deneme <- predict.mnl(mnl_bluetooth,data.cbc_4[data.cbc_4$id == 6 ,])
-
-# tüm cluster icin uygulayip kisi bazinda max cekiyorum
-deneme4 <- predict.mnl(mnl_bluetooth,data.cbc_4)
-offer_4 <- as.data.table(deneme4)[,.SD[which.max(share)],by=id]
+offer4_fave <- offer4[which.max(offer4$count),]
+offer4_fave
