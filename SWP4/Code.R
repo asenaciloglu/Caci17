@@ -65,9 +65,7 @@ predict.mnl <- function(model , data ) {
 #head(MarketSimulation,12)
 
 
-deneme <- predict.mnl(mnl_bluetooth,data.cbc[data.cbc$id == 6 ,])
-
-
+# deneme <- predict.mnl(mnl_bluetooth,data.cbc[data.cbc$id == 6 ,])
 
 #---- conjoint for cluster 1----
 data.cbc_1$price <- data.cbc_1$price/100 # niye abi ne alaka
@@ -84,14 +82,14 @@ data.cbc_1$battery5 <- ifelse(data.cbc_1$battery1 == 0 & data.cbc_1$battery2 == 
 head(data.cbc_1,8)
 str(data.cbc_1)
 
-data_ml_bluetooth <- mlogit.data(data = data.cbc_1, choice = "choice", shape = "long",
-                                 id.var = "id", alt.var = "alt")
+data1_ml_bluetooth <- mlogit.data(data = data.cbc_1, choice = "choice", shape = "long",
+                                 id.var = "id", alt.var = "alt") # uygun data frame haline getir
 
-mnl_bluetooth = mlogit(choice ~ -1 + none + price +
+mnl1_bluetooth = mlogit(choice ~ -1 + none + price +
                          battery2 + battery3 + battery4 + battery5
                        + weight2 + weight3 + weight4 +
-                         sound2 + sound3 + sound4, data = data_ml_bluetooth)
-summary(mnl_bluetooth)
+                         sound2 + sound3 + sound4, data = data1_ml_bluetooth)# buyuk data train
+summary(mnl1_bluetooth)
 
 
 predict.mnl <- function(model , data ) {
@@ -104,7 +102,7 @@ predict.mnl <- function(model , data ) {
 }
 
 
-deneme <- predict.mnl(mnl_bluetooth,data.cbc_1[data.cbc_1$id == 6 ,])
+deneme <- predict.mnl(mnl1_bluetooth, data.cbc_1[data.cbc_1$id == 9 ,])
 
 # tüm cluster icin uygulayip kisi bazinda max cekiyorum
 # deneme1 <- predict.mnl(mnl_bluetooth,data.cbc_1)
@@ -112,11 +110,13 @@ deneme <- predict.mnl(mnl_bluetooth,data.cbc_1[data.cbc_1$id == 6 ,])
 
 # cluster daki her abi/abla ustunden donup max share ini alıp offer1 df sine eklemece
 a = 1
-offerDenemee = data.frame()
+offerDenemee = vector()
+offer1 = data.frame()
+
 for (x in unique(data.cbc_1$id)) {
-  predictionCase <- predict.mnl(mnl_bluetooth,data.cbc_1[data.cbc_1$id == x ,])
-  offer1 <- rbind(offerDenemee, predictionCase[which.max(predictionCase$share),])
-  a = a+1
+  predictionCase <- predict.mnl(mnl_bluetooth, data.cbc_1[data.cbc_1$id == x ,])
+  offer1 <- rbind(offer1, as.vector(predictionCase[which.max(predictionCase$share),]))
+  a = a + 1
 }
 
 #---- conjoint for cluster 2----
@@ -153,6 +153,14 @@ predict.mnl <- function(model , data ) {
   cbind (share , data )
 }
 
+
+offerDenemee = data.frame()
+
+for (x in unique(data.cbc_2$id)) {
+  predictionCase <- predict.mnl(mnl_bluetooth, data.cbc_2[data.cbc_2$id == x ,])
+  offer2 <- rbind(offerDenemee, predictionCase[which.max(predictionCase$share),])
+  #a = a + 1
+}
 
 #MarketSimulation <- read.csv("marketsimulation.csv")
 #MarketSimulation$price<-MarketSimulation$price/100
